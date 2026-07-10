@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정엘미디어 - 가업승계 그 이상, 100년 기업의 이야기</title>
+<meta name="description" content="가업승계·절세·지배구조를 깊이 있게 다루는 전문 경제신문 정엘미디어">
+<meta property="og:title" content="정엘미디어 - 가업승계 그 이상, 100년 기업의 이야기">
+<meta property="og:description" content="가업승계·절세·지배구조 전문 경제신문">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- 매니페스토 스트립 -->
+<div class="manifesto">
+  <div class="m1">"불꽃은 <em>이어져야</em> 합니다"</div>
+  <div class="m2">세대를 넘어, 시대를 넘어, 성장이 이어지는 건강한 부를 완성합니다 — 정엘미디어</div>
+</div>
+
+<!-- 히어로 -->
+<section class="hero"><div class="container">
+  <div class="hero-grid" id="hero-grid"></div>
+</div></section>
+
+<!-- 실적 스트립 -->
+<div class="stats"><div class="container">
+  <div class="stat"><div class="n">10<em>년</em></div><div class="d">가업승계 한 분야 매진</div></div>
+  <div class="stat"><div class="n">100<em>+</em></div><div class="d">기업 승계 컨설팅 수행</div></div>
+  <div class="stat"><div class="n">500<em>억+</em></div><div class="d">누적 절세 금액</div></div>
+  <div class="stat"><div class="n">업계 <em>최초</em></div><div class="d">승계 전문 유튜브 채널</div></div>
+</div></div>
+
+<!-- 본문 -->
+<div class="container"><div class="layout">
+  <main>
+    <div class="section-head"><h2>최신 기사</h2><a href="#" class="more" id="more-latest">더보기 →</a></div>
+    <div id="latest-list"></div>
+
+    <!-- 정엘TV -->
+    <div class="tv" id="tv-box" style="display:none">
+      <div class="tv-head"><h2>정엘<span>TV</span></h2><a href="#" id="tv-yt">유튜브 채널 바로가기 →</a></div>
+      <div class="tv-sub">업계 최초 가업승계 전문 유튜브 채널</div>
+      <div id="tv-main"></div>
+      <div class="tv-strip" id="tv-strip"></div>
+    </div>
+
+    <!-- L 가치 -->
+    <div class="section-head" style="margin-top:40px"><h2>정엘의 <span class="l">L</span> — 우리가 일하는 방식</h2></div>
+    <div class="lvalues">
+      <div class="lv"><div class="en">LOYAL · TRUSTWORTHY</div><div class="ko">믿음직한</div>
+        <p>고객과의 약속을 끝까지 지키며, 책임감을 가지고 고객의 문제를 끝까지 해결합니다.</p></div>
+      <div class="lv"><div class="en">LEAP · UNDERSTATED</div><div class="ko">절제된 품격</div>
+        <p>애써 포장하지 않아도 자연스럽게 깊이가 느껴지는, 성숙함에서 우러나오는 우아함.</p></div>
+      <div class="lv"><div class="en">LEAD · BEST IN CLASS</div><div class="ko">탁월한</div>
+        <p>고객의 기대를 넘어 감탄을 자아내는, 타의 추종을 불허하는 완전히 다른 차원의 완성도.</p></div>
+    </div>
+  </main>
+
+  <aside>
+    <div class="box"><h3>🔥 이번주 인기 기사</h3><ol class="rank" id="rank-list"></ol></div>
+
+    <a class="banner bn-brown" href="#" id="bn-institute">
+      <span class="tag">정엘가업승계연구소</span>
+      <div class="pre">JUNG-L INSTITUTE</div>
+      <h4>가업승계 그 이상,<br><em>100년 기업 아키텍트</em></h4>
+      <p>실력으로 시작하고 진심으로 마무리합니다.<br>지배구조·주식이동·세금 통합 진단</p>
+      <span class="bbtn">무료 승계진단 신청 →</span>
+    </a>
+
+    <a class="banner bn-gold" href="#" id="bn-premier">
+      <span class="tag">AD</span>
+      <div class="pre">PREMIER</div>
+      <h4>차원이 다른 절세 해법</h4>
+      <p>엄격한 기준으로 선별된 아키텍트가 함께하는<br>정엘 프리미어 서비스</p>
+      <span class="bbtn">프리미어 상담 →</span>
+    </a>
+
+    <div class="subscribe">
+      <div class="em">💬</div>
+      <h4>정엘미디어 구독</h4>
+      <p>새 기사 발행 시 카카오톡으로 바로 알림!</p>
+      <a href="#" id="bn-kakao">카카오 채널 구독 (무료)</a>
+    </div>
+
+    <div class="box"><h3>📂 채널 바로가기</h3><div class="chips" id="channel-chips"></div></div>
+  </aside>
+</div></div>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+(async function () {
+  const J = window.JUNGL, C = window.JUNGL_CONFIG;
+  J.renderHeader("home");
+  J.renderFooter();
+  document.getElementById("bn-institute").href = C.INSTITUTE_URL || "#";
+  document.getElementById("bn-premier").href = C.INSTITUTE_URL || "#";
+  document.getElementById("bn-kakao").href = C.KAKAO_CHANNEL_URL || "#";
+  document.getElementById("tv-yt").href = C.YOUTUBE_URL || "#";
+
+  // 채널 칩
+  document.getElementById("channel-chips").innerHTML = J.CHANNELS.map(c =>
+    `<a href="channel.html?ch=${c.slug}">${c.emoji} ${c.name}</a>`).join("");
+
+  // 히어로 (주요기사 6건)
+  const feats = await J.fetchArticles({ featured: true, limit: 6 });
+  const heroHtml = feats.map((a, i) => `
+    <a href="article.html?id=${a.id}" class="card ${i===0?"main":""}">
+      <div class="thumb ${J.thumbClass(a)}" ${J.thumbStyle(a)}>${J.iconOf(a)}</div>
+      <div class="overlay"></div>
+      <div class="meta">
+        <span class="chip">${J.chName(a.channel_slug)}</span>
+        <h3>${a.title}</h3>
+        ${i===0 && a.lede ? `<p class="lede">${a.lede}</p>` : ""}
+        <div class="by">${a.author||""} · ${J.fmtDate(a.published_at)}</div>
+      </div>
+    </a>`).join("");
+  document.getElementById("hero-grid").innerHTML = heroHtml ||
+    `<p style="grid-column:1/-1;color:#98908d;padding:30px 0">아직 등록된 주요 기사가 없습니다. 관리자 페이지에서 기사를 발행해 주세요.</p>`;
+
+  // 최신 기사
+  const latest = await J.fetchArticles({ limit: 6 });
+  document.getElementById("latest-list").innerHTML = latest.map(a => `
+    <article class="article-row">
+      <a class="thumb-s ${J.thumbClass(a)}" ${J.thumbStyle(a)} href="article.html?id=${a.id}">${J.iconOf(a)}</a>
+      <div>
+        <span class="cat">${J.chName(a.channel_slug)}</span>
+        <h3><a href="article.html?id=${a.id}">${a.title}</a></h3>
+        <p>${a.lede||""}</p>
+        <div class="by">${a.author||""} · ${J.fmtDate(a.published_at)}</div>
+      </div>
+    </article>`).join("");
+
+  // 인기 기사 (조회수순 5건)
+  const pops = await J.fetchArticles({ orderBy: "views", limit: 5 });
+  document.getElementById("rank-list").innerHTML = pops.map((a, i) => `
+    <li><span class="no">${i+1}</span>
+      <a href="article.html?id=${a.id}"><span class="c">${J.chName(a.channel_slug)}</span>${a.title}</a></li>`).join("");
+
+  // 정엘TV (유튜브 영상 있는 기사)
+  const vids = await J.fetchArticles({ hasVideo: true, limit: 5 });
+  if (vids.length) {
+    document.getElementById("tv-box").style.display = "block";
+    const m = vids[0];
+    document.getElementById("tv-main").innerHTML = `
+      <a class="tv-main" href="article.html?id=${m.id}" style="display:block;background-image:url('https://img.youtube.com/vi/${m.youtube_id}/hqdefault.jpg')">
+        <div class="play">▶</div>
+        <div class="cap"><h3>${m.title}</h3></div>
+      </a>`;
+    document.getElementById("tv-strip").innerHTML = vids.slice(1, 5).map(v => `
+      <a class="t" href="article.html?id=${v.id}" style="background-image:url('https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg')"><span class="icon">▶</span></a>`).join("");
+  }
+})();
+</script>
+</body>
+</html>

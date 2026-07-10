@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="channel-head"><div class="container">
+  <h1 id="ch-title">채널</h1>
+  <p id="ch-desc"></p>
+</div></div>
+
+<div class="container"><div class="layout">
+  <main>
+    <div id="ch-list"><p style="color:#98908d;padding:20px 0">불러오는 중…</p></div>
+  </main>
+  <aside>
+    <div class="box"><h3>🔥 이번주 인기 기사</h3><ol class="rank" id="rank-list"></ol></div>
+    <div class="box"><h3>📂 채널 바로가기</h3><div class="chips" id="channel-chips"></div></div>
+  </aside>
+</div></div>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+(async function () {
+  const J = window.JUNGL;
+  const ch = new URLSearchParams(location.search).get("ch") || "";
+  J.renderHeader(ch);
+  J.renderFooter();
+
+  const meta = J.CHANNELS.find(c => c.slug === ch);
+  document.getElementById("ch-title").textContent = meta ? `${meta.emoji} ${meta.name}` : "전체 기사";
+  document.title = (meta ? meta.name : "전체 기사") + " - 정엘미디어";
+
+  document.getElementById("channel-chips").innerHTML = J.CHANNELS.map(c =>
+    `<a href="channel.html?ch=${c.slug}">${c.emoji} ${c.name}</a>`).join("");
+
+  const rows = await J.fetchArticles({ channel: ch || undefined, limit: 30 });
+  document.getElementById("ch-list").innerHTML = rows.length ? rows.map(a => `
+    <article class="article-row">
+      <a class="thumb-s ${J.thumbClass(a)}" ${J.thumbStyle(a)} href="article.html?id=${a.id}">${J.iconOf(a)}</a>
+      <div>
+        <span class="cat">${J.chName(a.channel_slug)}</span>
+        <h3><a href="article.html?id=${a.id}">${a.title}</a></h3>
+        <p>${a.lede||""}</p>
+        <div class="by">${a.author||""} · ${J.fmtDate(a.published_at)}</div>
+      </div>
+    </article>`).join("")
+    : `<p style="color:#98908d;padding:20px 0">이 채널에 아직 기사가 없습니다.</p>`;
+
+  const pops = await J.fetchArticles({ orderBy: "views", limit: 5 });
+  document.getElementById("rank-list").innerHTML = pops.map((a, i) => `
+    <li><span class="no">${i+1}</span>
+      <a href="article.html?id=${a.id}"><span class="c">${J.chName(a.channel_slug)}</span>${a.title}</a></li>`).join("");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정엘미디어 관리자</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="admin-wrap">
+
+  <!-- 데모 모드 안내 -->
+  <div class="admin-card" id="demo-note" style="display:none">
+    <h2>⚙️ Supabase 연결 필요</h2>
+    <p style="font-size:14px;line-height:1.8">
+      아직 <b>js/config.js</b> 에 Supabase 주소와 키가 입력되지 않아 관리자 기능을 사용할 수 없습니다.<br>
+      README-배포가이드.md 의 순서대로 Supabase 프로젝트를 만들고 값을 입력해 주세요.
+    </p>
+  </div>
+
+  <!-- 로그인 -->
+  <div class="admin-card" id="login-card" style="display:none">
+    <h2>🔐 관리자 로그인</h2>
+    <div class="msg" id="login-msg"></div>
+    <div class="form-row"><label>이메일</label><input type="email" id="login-email" placeholder="admin@example.com"></div>
+    <div class="form-row"><label>비밀번호</label><input type="password" id="login-pw"></div>
+    <button class="btn btn-red" id="btn-login">로그인</button>
+    <p style="font-size:12px;color:#98908d;margin-top:12px">
+      * 관리자 계정은 Supabase 대시보드 &gt; Authentication &gt; Users 에서 &quot;Add user&quot;로 생성합니다.
+    </p>
+  </div>
+
+  <!-- 기사 작성 -->
+  <div id="editor-area" style="display:none">
+    <div class="admin-card">
+      <h2 id="editor-title">✍️ 새 기사 작성</h2>
+      <div class="msg" id="save-msg"></div>
+      <input type="hidden" id="a-id">
+      <div class="form-row"><label>제목 *</label><input type="text" id="a-title" placeholder="기사 제목"></div>
+      <div class="form-row"><label>요약 (부제)</label><input type="text" id="a-lede" placeholder="기사 목록과 상단에 표시되는 1~2문장 요약"></div>
+      <div class="form-inline">
+        <div class="form-row"><label>채널 *</label><select id="a-channel"></select></div>
+        <div class="form-row"><label>기자명</label><input type="text" id="a-author" value="정엘 편집국"></div>
+      </div>
+      <div class="form-inline">
+        <div class="form-row">
+          <label>대표 이미지</label>
+          <input type="file" id="a-thumb-file" accept="image/*">
+          <div class="hint">업로드하면 자동으로 주소가 입력됩니다. <span id="thumb-status"></span></div>
+          <input type="text" id="a-thumb" placeholder="이미지 URL (직접 입력도 가능)" style="margin-top:6px">
+        </div>
+        <div class="form-row">
+          <label>유튜브 영상 ID</label>
+          <input type="text" id="a-youtube" placeholder="예: dQw4w9WgXcQ (영상 주소의 v= 뒷부분)">
+          <div class="hint">입력하면 기사에 영상이 삽입되고 정엘TV 갤러리에 노출됩니다.</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>본문 *</label>
+        <textarea id="a-content" placeholder="본문을 입력하세요. 문단은 빈 줄로 구분하면 자동으로 정리됩니다. HTML 태그(<h2>, <blockquote>, <img> 등)도 그대로 사용할 수 있습니다."></textarea>
+      </div>
+      <div class="form-row checkline">
+        <label><input type="checkbox" id="a-featured"> 메인 주요기사(히어로) 노출</label>
+        <label><input type="checkbox" id="a-published" checked> 즉시 발행</label>
+      </div>
+      <button class="btn btn-red" id="btn-save">저장</button>
+      <button class="btn btn-outline" id="btn-new" style="margin-left:8px">새 기사</button>
+      <button class="btn btn-outline" id="btn-logout" style="float:right">로그아웃</button>
+    </div>
+
+    <!-- 기사 목록 -->
+    <div class="admin-card">
+      <h2>📄 기사 관리</h2>
+      <table class="admin-list">
+        <thead><tr><th>상태</th><th>채널</th><th>제목</th><th>날짜</th><th>조회</th><th>관리</th></tr></thead>
+        <tbody id="list-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL, C = window.JUNGL_CONFIG;
+  J.renderHeader("");
+  J.renderFooter();
+
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+
+  if (J.DEMO || !sb) { $("demo-note").style.display = "block"; return; }
+
+  // 채널 옵션
+  $("a-channel").innerHTML = J.CHANNELS.map(c => `<option value="${c.slug}">${c.name}</option>`).join("");
+
+  function show(el, on) { $(el).style.display = on ? "block" : "none"; }
+  function msg(id, text, ok) {
+    const m = $(id); m.textContent = text;
+    m.className = "msg " + (ok ? "ok" : "err");
+    setTimeout(() => { m.className = "msg"; }, 4000);
+  }
+
+  // ── 세션 확인 ──
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session) { show("login-card", false); show("editor-area", true); loadList(); }
+    else show("login-card", true);
+  });
+
+  // ── 로그인 ──
+  $("btn-login").onclick = async () => {
+    const { error } = await sb.auth.signInWithPassword({
+      email: $("login-email").value.trim(), password: $("login-pw").value
+    });
+    if (error) return msg("login-msg", "로그인 실패: " + error.message, false);
+    show("login-card", false); show("editor-area", true); loadList();
+  };
+  $("btn-logout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+
+  // ── 이미지 업로드 ──
+  $("a-thumb-file").onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    $("thumb-status").textContent = "업로드 중…";
+    const path = Date.now() + "-" + f.name.replace(/[^a-zA-Z0-9.\-_]/g, "");
+    const { error } = await sb.storage.from("article-images").upload(path, f);
+    if (error) { $("thumb-status").textContent = "실패: " + error.message; return; }
+    const { data } = sb.storage.from("article-images").getPublicUrl(path);
+    $("a-thumb").value = data.publicUrl;
+    $("thumb-status").textContent = "✅ 완료";
+  };
+
+  // ── 본문 정리: 빈 줄 → <p> ──
+  function toHtml(t) {
+    t = t.trim();
+    if (/<p[\s>]|<h[1-6]|<div|<blockquote/i.test(t)) return t; // 이미 HTML이면 그대로
+    return t.split(/\n\s*\n/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("\n");
+  }
+  function fromHtml(h) {
+    if (!h) return "";
+    return h.replace(/<\/p>\s*<p>/g, "\n\n").replace(/<br\s*\/?>/g, "\n").replace(/<\/?p>/g, "").trim() || h;
+  }
+
+  // ── 저장 ──
+  $("btn-save").onclick = async () => {
+    const row = {
+      title: $("a-title").value.trim(),
+      lede: $("a-lede").value.trim(),
+      content: toHtml($("a-content").value),
+      channel_slug: $("a-channel").value,
+      author: $("a-author").value.trim() || "정엘 편집국",
+      thumbnail_url: $("a-thumb").value.trim(),
+      youtube_id: $("a-youtube").value.trim(),
+      is_featured: $("a-featured").checked,
+      published: $("a-published").checked
+    };
+    if (!row.title) return msg("save-msg", "제목을 입력해 주세요.", false);
+    if (!row.content) return msg("save-msg", "본문을 입력해 주세요.", false);
+
+    const id = $("a-id").value;
+    let error;
+    if (id) ({ error } = await sb.from("articles").update(row).eq("id", id));
+    else ({ error } = await sb.from("articles").insert(row));
+    if (error) return msg("save-msg", "저장 실패: " + error.message, false);
+    msg("save-msg", id ? "수정되었습니다." : "기사가 등록되었습니다.", true);
+    if (!id) resetForm();
+    loadList();
+  };
+
+  $("btn-new").onclick = resetForm;
+  function resetForm() {
+    $("a-id").value = ""; $("a-title").value = ""; $("a-lede").value = "";
+    $("a-content").value = ""; $("a-thumb").value = ""; $("a-youtube").value = "";
+    $("a-featured").checked = false; $("a-published").checked = true;
+    $("editor-title").textContent = "✍️ 새 기사 작성";
+  }
+
+  // ── 목록 ──
+  async function loadList() {
+    const { data, error } = await sb.from("articles").select("*").order("created_at", { ascending: false }).limit(100);
+    if (error) return;
+    $("list-body").innerHTML = (data || []).map(a => `
+      <tr>
+        <td class="${a.published ? "st-pub" : "st-draft"}">${a.published ? "발행" : "임시"}</td>
+        <td>${J.chName(a.channel_slug)}</td>
+        <td>${a.is_featured ? "⭐ " : ""}${a.title}</td>
+        <td>${J.fmtDate(a.published_at)}</td>
+        <td>${a.views||0}</td>
+        <td>
+          <button onclick="editArticle('${a.id}')">수정</button>
+          <button onclick="togglePub('${a.id}', ${a.published})">${a.published ? "내리기" : "발행"}</button>
+          <button class="del" onclick="delArticle('${a.id}')">삭제</button>
+        </td>
+      </tr>`).join("");
+    window.__rows = data;
+  }
+
+  window.editArticle = (id) => {
+    const a = (window.__rows || []).find(r => r.id === id); if (!a) return;
+    $("a-id").value = a.id; $("a-title").value = a.title; $("a-lede").value = a.lede || "";
+    $("a-content").value = fromHtml(a.content); $("a-channel").value = a.channel_slug;
+    $("a-author").value = a.author || ""; $("a-thumb").value = a.thumbnail_url || "";
+    $("a-youtube").value = a.youtube_id || "";
+    $("a-featured").checked = !!a.is_featured; $("a-published").checked = !!a.published;
+    $("editor-title").textContent = "✏️ 기사 수정";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  window.togglePub = async (id, cur) => {
+    await sb.from("articles").update({ published: !cur }).eq("id", id); loadList();
+  };
+  window.delArticle = async (id) => {
+    if (!confirm("이 기사를 삭제할까요? 되돌릴 수 없습니다.")) return;
+    await sb.from("articles").delete().eq("id", id); loadList();
+  };
+})();
+</script>
+</body>
+</html>
