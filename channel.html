@@ -281,7 +281,7 @@ window.JUNGL_CONFIG = {
   ADDRESS: "서울특별시 ○○구 ○○로 00",
   PHONE: "02-0000-0000",
   KAKAO_CHANNEL_URL: "#",                      // 카카오 채널 주소
-  YOUTUBE_URL: "#",                            // 정엘TV 유튜브 채널
+  YOUTUBE_URL: "https://www.youtube.com/channel/UCOsUUoxhs69bPAi1N03D9Og", // 정엘 유튜브 채널
   INSTITUTE_URL: "#"                           // 정엘가업승계연구소 홈페이지
 };
 
@@ -333,7 +333,7 @@ window.JUNGL_CONFIG = {
     { slug: "caselaw",   name: "판례·예규",      emoji: "⚖️" },
     { slug: "century",   name: "100년기업스토리", emoji: "🏭" },
     { slug: "column",    name: "정엘칼럼",       emoji: "🖋️" },
-    { slug: "tv",        name: "정엘TV",         emoji: "📺" }
+    { slug: "tv",        name: "정엘 유튜브",     emoji: "📺" }
   ];
   const chName = s => (CHANNELS.find(c => c.slug === s) || {}).name || s;
 
@@ -406,7 +406,9 @@ window.JUNGL_CONFIG = {
     const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${days[today.getDay()]}요일`;
     const lSvg = `<svg class="l-mark" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 7,7 7,33 30,33 30,40 0,40" fill="#C0111F"/></svg>`;
     const nav = CHANNELS.map(c =>
-      `<li><a href="channel.html?ch=${c.slug}" class="${active===c.slug?"active":""}">${c.name}</a></li>`).join("");
+      c.slug === "tv"
+        ? `<li><a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">${c.name}</a></li>`
+        : `<li><a href="channel.html?ch=${c.slug}" class="${active===c.slug?"active":""}">${c.name}</a></li>`).join("");
     document.getElementById("site-header").innerHTML = `
       <div class="topbar"><div class="container">
         <span class="reg">${dateStr} · ${C.REG_NO || "인터넷신문 (등록 준비 중)"}</span>
