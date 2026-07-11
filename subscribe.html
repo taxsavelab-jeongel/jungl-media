@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>구독 신청 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.sub-wrap{max-width:560px;margin:0 auto;padding:70px 20px 90px;text-align:center}
+.sub-wrap .em{font-size:44px}
+.sub-wrap h1{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:var(--brown);margin:14px 0 10px}
+.sub-wrap .desc{font-size:15px;color:var(--txt-gray);line-height:1.8;margin-bottom:30px}
+.sub-form{display:flex;gap:10px;margin-bottom:14px}
+.sub-form input{flex:1;padding:14px 16px;border:1px solid var(--gray);border-radius:6px;font-size:15px;font-family:inherit}
+.sub-form button{background:var(--red);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;padding:14px 26px;cursor:pointer}
+.sub-form button:hover{background:var(--red-dark)}
+.sub-msg{font-size:14px;min-height:22px}
+.sub-msg.ok{color:#1a7a3a;font-weight:700}
+.sub-msg.err{color:var(--red)}
+.sub-priv{font-size:12px;color:var(--txt-light);margin-top:26px;line-height:1.7;text-align:left;background:var(--bluegray);border-radius:8px;padding:16px 18px}
+@media(max-width:600px){.sub-form{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="sub-wrap">
+  <div class="em">📰</div>
+  <h1>정엘미디어 구독 신청</h1>
+  <p class="desc">이메일 주소를 남겨주시면 새 기사와 가업승계·절세 소식을<br>이메일로 보내드립니다. (무료)</p>
+  <form class="sub-form" id="sub-form">
+    <input type="email" id="sub-email" placeholder="이메일 주소를 입력하세요" required>
+    <button type="submit">구독하기</button>
+  </form>
+  <div class="sub-msg" id="sub-msg"></div>
+  <div class="sub-priv">
+    <b>개인정보 수집·이용 안내</b><br>
+    · 수집 항목: 이메일 주소 · 목적: 정엘미디어 소식(뉴스레터) 발송 · 보유 기간: 구독 해지 시까지<br>
+    · 구독 해지를 원하시면 press 메일 또는 뉴스레터 하단 링크로 언제든 요청하실 수 있습니다.
+    구독 신청 시 위 내용에 동의한 것으로 봅니다.
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+
+  const form = document.getElementById("sub-form");
+  const msg = document.getElementById("sub-msg");
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("sub-email").value.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.className="sub-msg err"; msg.textContent="이메일 주소 형식을 확인해 주세요."; return; }
+    if (!J.sb) { msg.className="sub-msg err"; msg.textContent="일시적인 오류입니다. 잠시 후 다시 시도해 주세요."; return; }
+    const { error } = await J.sb.from("subscribers").insert({ email });
+    if (error) {
+      if (String(error.message).includes("duplicate")) { msg.className="sub-msg ok"; msg.textContent="이미 구독 중인 이메일입니다. 감사합니다!"; }
+      else { msg.className="sub-msg err"; msg.textContent="신청 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."; }
+      return;
+    }
+    msg.className="sub-msg ok"; msg.textContent="구독 신청이 완료되었습니다. 감사합니다!";
+    form.reset();
+  };
+})();
+</script>
+</body>
+</html>

@@ -9,216 +9,40 @@
 <meta property="og:description" content="가업승계·절세·지배구조 전문 경제신문">
 <meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --brown:#381513; --brown-deep:#241009;
-  --red:#C0111F; --red-dark:#9c0e19;
-  --bluegray:#E2ECF2; --gray:#CAD0D7; --sage:#98BEC4;
-  --gold:#9A8768; --gold-light:#b5a488;
-  --ink:#221512; --txt-gray:#6b625f; --txt-light:#98908d;
-  --line:#e6e1dd; --bg:#faf9f7; --white:#fff;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-a{text-decoration:none;color:inherit}
-img{max-width:100%;display:block}
-.container{max-width:1200px;margin:0 auto;padding:0 20px}
-.serif{font-family:'Noto Serif KR',serif}
-.topbar{background:var(--brown-deep);color:#c9b8b3;font-size:12px}
-.topbar .container{display:flex;justify-content:space-between;align-items:center;height:34px}
-.topbar .reg{color:#a08d87}
-.topbar .util a{margin-left:16px;color:#c9b8b3}
-.topbar .util a:hover{color:#fff}
-header.masthead{background:var(--white);border-bottom:1px solid var(--line)}
-.masthead .container{display:flex;justify-content:space-between;align-items:center;padding:26px 20px}
-.brand{display:flex;align-items:center;gap:14px}
-.logo{display:flex;align-items:flex-end;gap:8px}
-.logo .wordmark{font-size:40px;font-weight:900;color:var(--brown);letter-spacing:-2.5px;line-height:1}
-.logo .l-block{display:flex;align-items:flex-end;gap:7px}
-.logo .l-mark{width:30px;height:40px;flex:none}
-.logo .sub{font-size:15px;font-weight:700;color:var(--brown);line-height:1.25;letter-spacing:-.5px;padding-bottom:2px}
-.brand-slogan{font-size:12.5px;color:var(--txt-gray);margin-top:7px;letter-spacing:-.2px}
-.brand-slogan b{color:var(--red);font-weight:700}
-.head-cta{display:flex;gap:10px;align-items:center}
-.btn{display:inline-block;padding:9px 18px;border-radius:3px;font-size:13px;font-weight:500;transition:.2s;cursor:pointer;border:none}
-.btn-outline{border:1px solid var(--brown);color:var(--brown);background:transparent}
-.btn-outline:hover{background:var(--brown);color:#fff}
-.btn-red{background:var(--red);color:#fff;font-weight:700}
-.btn-red:hover{background:var(--red-dark)}
-nav.gnb{background:var(--brown);position:sticky;top:0;z-index:100}
-.gnb ul{display:flex;list-style:none;overflow-x:auto}
-.gnb li a{display:block;padding:14px 20px;color:#e8ddd9;font-size:15px;font-weight:500;white-space:nowrap;border-bottom:3px solid transparent}
-.gnb li a:hover,.gnb li a.active{color:#fff;border-bottom-color:var(--red)}
-.gnb li.premier a{color:var(--gold-light);font-weight:700}
-.gnb li.premier a:hover{border-bottom-color:var(--gold)}
-.manifesto{background:linear-gradient(90deg,var(--brown-deep),var(--brown) 55%,#4a201a);color:#fff;text-align:center;padding:20px 16px}
-.manifesto .m1{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:900;letter-spacing:1px}
-.manifesto .m1 em{color:#ff8b95;font-style:normal}
-.manifesto .m2{font-size:12.5px;color:#c9b8b3;margin-top:5px;letter-spacing:.3px}
-.hero{padding:34px 0}
-.hero-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:14px}
-.card{position:relative;border-radius:8px;overflow:hidden;background:var(--brown);min-height:180px;display:flex;align-items:flex-end}
-.card.main{grid-row:span 2;min-height:420px}
-.card .thumb{position:absolute;inset:0;background-size:cover;background-position:center}
-.card .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,16,9,0) 30%,rgba(36,16,9,.93) 100%)}
-.card .meta{position:relative;padding:20px;color:#fff;width:100%}
-.card .chip{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:2px;margin-bottom:8px;letter-spacing:.3px}
-.card h3{font-family:'Noto Serif KR',serif;font-weight:700;font-size:16px;line-height:1.45;letter-spacing:-.3px}
-.card.main h3{font-size:26px;line-height:1.4}
-.card.main .lede{font-size:14px;color:#dcccc7;margin-top:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card .by{font-size:12px;color:#b39d96;margin-top:8px}
-.g1{background:linear-gradient(135deg,#4a201a,#241009)}
-.g2{background:linear-gradient(135deg,#5a7d89,#31555f)}
-.g3{background:linear-gradient(135deg,#9A8768,#5f5138)}
-.g4{background:linear-gradient(135deg,#7d8b96,#49565f)}
-.g5{background:linear-gradient(135deg,#8a3a34,#4a1712)}
-.g6{background:linear-gradient(135deg,#556b4e,#2e3f29)}
-.thumb .icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:44px;opacity:.45}
-.card.main .thumb .icon{font-size:80px}
-.stats{background:var(--bluegray);border-top:1px solid #d3e0e8;border-bottom:1px solid #d3e0e8}
-.stats .container{display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;padding:22px 20px}
-.stat{text-align:center;min-width:160px}
-.stat .n{font-size:26px;font-weight:900;color:var(--brown);letter-spacing:-1px}
-.stat .n em{color:var(--red);font-style:normal}
-.stat .d{font-size:12.5px;color:#5b707c;margin-top:2px}
-.layout{display:grid;grid-template-columns:1fr 340px;gap:34px;padding:34px 0 50px}
-.section-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--brown);padding-bottom:10px;margin:34px 0 20px}
-.section-head:first-child{margin-top:0}
-.section-head h2{font-family:'Noto Serif KR',serif;font-size:21px;color:var(--brown);font-weight:900}
-.section-head h2 .l{color:var(--red)}
-.section-head .more{font-size:13px;color:var(--txt-gray)}
-.section-head .more:hover{color:var(--red)}
-.article-row{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
-.article-row .thumb-s{flex:0 0 168px;height:110px;border-radius:6px;position:relative;overflow:hidden;background-size:cover;background-position:center}
-.article-row .thumb-s .icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:34px;opacity:.45}
-.article-row .cat{font-size:12px;font-weight:700;color:var(--red);letter-spacing:.5px}
-.article-row h3{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;line-height:1.45;margin:4px 0 6px;letter-spacing:-.3px}
-.article-row h3 a:hover{color:var(--red);text-decoration:underline;text-underline-offset:3px}
-.article-row p{font-size:13.5px;color:var(--txt-gray);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.article-row .by{font-size:12px;color:var(--txt-light);margin-top:6px}
-.tv{background:var(--brown);border-radius:10px;padding:24px;color:#fff;margin-top:34px}
-.tv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.tv-head h2{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900}
-.tv-head h2 span{color:#ff8b95}
-.tv-head a{font-size:13px;color:#c9b8b3}
-.tv-sub{font-size:12.5px;color:#b39d96;margin-bottom:14px}
-.tv-main{position:relative;border-radius:8px;overflow:hidden;height:250px;margin-bottom:12px;background-size:cover;background-position:center;cursor:pointer}
-.tv-main .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:rgba(192,17,31,.95);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
-.tv-main .cap{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
-.tv-main .cap h3{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700}
-.tv-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.tv-strip .t{height:72px;border-radius:6px;position:relative;overflow:hidden;cursor:pointer;opacity:.85;background-size:cover;background-position:center}
-.tv-strip .t:hover{opacity:1;outline:2px solid var(--red)}
-.tv-strip .t .icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;opacity:.6}
-.lvalues{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:0}
-.lv{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--red);border-radius:8px;padding:20px}
-.lv .en{font-size:13px;font-weight:900;color:var(--red);letter-spacing:1.5px}
-.lv .ko{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:900;color:var(--brown);margin:4px 0 6px}
-.lv p{font-size:12.5px;color:var(--txt-gray);line-height:1.55}
-aside .box{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:22px;margin-bottom:22px}
-aside .box h3{font-family:'Noto Serif KR',serif;font-size:17px;color:var(--brown);font-weight:900;padding-bottom:12px;border-bottom:2px solid var(--red);margin-bottom:14px}
-.rank{list-style:none}
-.rank li{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
-.rank li:last-child{border-bottom:none}
-.rank .no{flex:0 0 26px;height:26px;background:var(--brown);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;border-radius:3px}
-.rank li:first-child .no{background:var(--red)}
-.rank a{font-size:14px;line-height:1.5;letter-spacing:-.2px}
-.rank a:hover{text-decoration:underline;text-underline-offset:3px}
-.rank .c{display:block;font-size:11px;color:var(--red);font-weight:700}
-.banner{border-radius:8px;overflow:hidden;margin-bottom:22px;position:relative;color:#fff;padding:26px 22px;display:block}
-.banner .tag{font-size:11px;opacity:.6;position:absolute;top:10px;right:14px}
-.banner .pre{font-size:11px;font-weight:700;letter-spacing:2.5px;opacity:.75;margin-bottom:6px}
-.banner h4{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:900;line-height:1.45;margin-bottom:8px}
-.banner p{font-size:13px;opacity:.85;margin-bottom:14px;line-height:1.55}
-.banner .bbtn{display:inline-block;background:#fff;color:var(--brown);font-size:13px;font-weight:700;padding:8px 16px;border-radius:3px}
-.bn-brown{background:linear-gradient(135deg,#4a201a,var(--brown-deep))}
-.bn-brown h4 em{color:#ff8b95;font-style:normal}
-.bn-gold{background:linear-gradient(135deg,var(--gold),#6e5f45)}
-.bn-gold .bbtn{color:#6e5f45}
-.subscribe{background:var(--bluegray);border:1px solid #d3e0e8;border-radius:8px;padding:24px 22px;text-align:center;margin-bottom:22px}
-.subscribe .em{font-size:30px}
-.subscribe h4{font-family:'Noto Serif KR',serif;color:var(--brown);font-size:17px;font-weight:900;margin:8px 0 4px}
-.subscribe p{font-size:13px;color:#5b707c;margin-bottom:14px}
-.subscribe a{display:block;background:#fae100;color:#3b1e1e;font-weight:700;font-size:14px;padding:11px;border-radius:5px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chips a{font-size:13px;border:1px solid var(--line);background:var(--white);padding:7px 13px;border-radius:20px;color:#554b48}
-.chips a:hover{border-color:var(--red);color:var(--red);background:#fdf3f4}
-footer{background:var(--brown-deep);color:#b3a19b;margin-top:20px}
-.f-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:34px;padding:44px 0 34px;border-bottom:1px solid rgba(255,255,255,.08)}
-.f-brand .logo .wordmark{color:#fff;font-size:28px}
-.f-brand .logo .sub{color:#fff;font-size:12px}
-.f-brand .logo .l-mark{width:22px;height:28px}
-.f-brand p{font-size:13px;line-height:1.75;margin-top:12px}
-footer h5{color:#fff;font-size:14px;margin-bottom:14px;font-weight:700}
-footer ul{list-style:none}
-footer ul li{margin-bottom:9px;font-size:13px}
-footer ul li a:hover{color:#ff8b95}
-.f-info table{font-size:13px;border-collapse:collapse}
-.f-info td{padding:3px 12px 3px 0;vertical-align:top}
-.f-info td:first-child{color:#7d6a64;white-space:nowrap}
-.f-bottom{padding:18px 0;font-size:12px;color:#6d5a54;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-@media(max-width:960px){
-  .hero-grid{grid-template-columns:1fr 1fr}
-  .card.main{grid-column:span 2;grid-row:auto;min-height:300px}
-  .layout{grid-template-columns:1fr}
-  .f-top{grid-template-columns:1fr 1fr}
-  .lvalues{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  .hero-grid{grid-template-columns:1fr}
-  .card.main{grid-column:span 1}
-  .masthead .container{flex-direction:column;gap:14px}
-  .article-row .thumb-s{flex:0 0 110px;height:84px}
-  .tv-strip{grid-template-columns:repeat(2,1fr)}
-  .f-top{grid-template-columns:1fr}
-  .logo .wordmark{font-size:32px}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-window.JUNGL_CONFIG = {
-  SUPABASE_URL: "https://zininxukaybakogyflfq.supabase.co",
-  SUPABASE_ANON_KEY: "sb_publishable_bk_Mt_gi_l-IkRTqoroveQ_EAi_wr8r",
-  SITE_NAME: "정엘미디어",
-  SLOGAN: "가업승계 그 이상, 100년 기업의 이야기를 잇는 경제신문",
-  REG_NO: "등록번호 (등록 후 기재)",
-  PUBLISHER: "(발행인)",
-  EDITOR: "(편집인)",
-  YOUTH_OFFICER: "(청소년보호책임자)",
-  EMAIL: "press@example.com",
-  ADDRESS: "서울특별시 ○○구 ○○로 00",
-  PHONE: "02-0000-0000",
-  KAKAO_CHANNEL_URL: "#",
-  YOUTUBE_URL: "https://www.youtube.com/channel/UCOsUUoxhs69bPAi1N03D9Og",
-  INSTITUTE_URL: "#"
-};
-</script>
+<script src="config.js"></script>
 </head>
 <body>
 
 <div id="site-header"></div>
 
+<!-- 매니페스토 스트립 -->
 <div class="manifesto">
   <div class="m1">"불꽃은 <em>이어져야</em> 합니다"</div>
   <div class="m2">세대를 넘어, 시대를 넘어, 성장이 이어지는 건강한 부를 완성합니다 — 정엘미디어</div>
 </div>
 
+<!-- 히어로 -->
 <section class="hero"><div class="container">
   <div class="hero-grid" id="hero-grid"></div>
 </div></section>
 
+<!-- 실적 스트립 -->
 <div class="stats"><div class="container">
-  <div class="stat"><div class="n">10<em>년</em></div><div class="d">가업승계 한 분야 매진</div></div>
-  <div class="stat"><div class="n">100<em>+</em></div><div class="d">기업 승계 컨설팅 수행</div></div>
-  <div class="stat"><div class="n">500<em>억+</em></div><div class="d">누적 절세 금액</div></div>
+  <div class="stat"><div class="n">15<em>년</em></div><div class="d">가업승계 한 분야 매진</div></div>
+  <div class="stat"><div class="n">1,000<em>+</em></div><div class="d">기업 승계 컨설팅 수행</div></div>
+  <div class="stat"><div class="n">5,000<em>억+</em></div><div class="d">누적 절세 금액</div></div>
   <div class="stat"><div class="n">업계 <em>최초</em></div><div class="d">승계 전문 유튜브 채널</div></div>
 </div></div>
 
+<!-- 본문 -->
 <div class="container"><div class="layout">
   <main>
     <div class="section-head"><h2>최신 기사</h2><a href="#" class="more" id="more-latest">더보기 →</a></div>
     <div id="latest-list"></div>
 
+    <!-- 정엘TV -->
     <div class="tv" id="tv-box" style="display:none">
       <div class="tv-head"><h2>정엘 <span>유튜브</span></h2><a href="#" id="tv-yt" target="_blank" rel="noopener">유튜브 채널 바로가기 →</a></div>
       <div class="tv-sub">업계 최초 가업승계 전문 유튜브 채널</div>
@@ -226,6 +50,7 @@ window.JUNGL_CONFIG = {
       <div class="tv-strip" id="tv-strip"></div>
     </div>
 
+    <!-- L 가치 -->
     <div class="section-head" style="margin-top:40px"><h2>정엘의 <span class="l">L</span> — 우리가 일하는 방식</h2></div>
     <div class="lvalues">
       <div class="lv"><div class="en">LOYAL · TRUSTWORTHY</div><div class="ko">믿음직한</div>
@@ -245,22 +70,30 @@ window.JUNGL_CONFIG = {
       <div class="pre">JUNG-L INSTITUTE</div>
       <h4>가업승계 그 이상,<br><em>100년 기업 아키텍트</em></h4>
       <p>실력으로 시작하고 진심으로 마무리합니다.<br>지배구조·주식이동·세금 통합 진단</p>
-      <span class="bbtn">무료 승계진단 신청 →</span>
+      <span class="bbtn">상담 신청 →</span>
     </a>
 
-    <a class="banner bn-gold" href="#" id="bn-premier">
-      <span class="tag">AD</span>
+    <a class="banner bn-gold" href="premier.html" id="bn-premier">
+      <span class="tag">JEONGEL PREMIERE</span>
       <div class="pre">PREMIER</div>
-      <h4>차원이 다른 절세 해법</h4>
-      <p>엄격한 기준으로 선별된 아키텍트가 함께하는<br>정엘 프리미어 서비스</p>
-      <span class="bbtn">프리미어 상담 →</span>
+      <h4>차원이 다른 절세 해법,<br>정엘 프리미어</h4>
+      <p>IPO·M&amp;A, 가업승계, 법인세 절세, 자기주식,<br>사내근로복지기금 — 정엘 아키텍트가 설계합니다</p>
+      <span class="bbtn">프리미어 상담 신청 →</span>
+    </a>
+
+    <a class="banner bn-brown" href="https://docs.google.com/forms/d/e/1FAIpQLSdmpPNj6sEBfd1AYkzvaXap12EFrk3oPdxVwoQAPa0ShYlSSg/viewform" target="_blank" rel="noopener">
+      <span class="tag">무료 자료</span>
+      <div class="pre">FREE PDF</div>
+      <h4>가지급금 정리 체크리스트<br><em>무료 다운로드</em></h4>
+      <p>인정이자·상여처분·승계 리스크 10분 자가진단.<br>신청 즉시 이메일로 PDF를 보내드립니다.</p>
+      <span class="bbtn">무료로 받기 →</span>
     </a>
 
     <div class="subscribe">
-      <div class="em">💬</div>
+      <div class="em">📧</div>
       <h4>정엘미디어 구독</h4>
-      <p>새 기사 발행 시 카카오톡으로 바로 알림!</p>
-      <a href="#" id="bn-kakao">카카오 채널 구독 (무료)</a>
+      <p>새 기사와 승계·절세 소식을 이메일로 받아보세요!</p>
+      <a href="subscribe.html" id="bn-kakao">이메일 구독 신청 (무료)</a>
     </div>
 
     <div class="box"><h3>📂 채널 바로가기</h3><div class="chips" id="channel-chips"></div></div>
@@ -269,145 +102,22 @@ window.JUNGL_CONFIG = {
 
 <footer id="site-footer"></footer>
 
-<script>
-(function () {
-  const C = window.JUNGL_CONFIG || {};
-  const DEMO = !C.SUPABASE_URL || !C.SUPABASE_ANON_KEY;
-  let sb = null;
-  if (!DEMO && window.supabase) {
-    sb = window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
-  }
-  const CHANNELS = [
-    { slug: "architect", name: "아키텍트리포트", emoji: "🏛️" },
-    { slug: "taxbrief",  name: "세법브리핑",     emoji: "🧾" },
-    { slug: "taxsaving", name: "절세전략",       emoji: "💰" },
-    { slug: "caselaw",   name: "판례·예규",      emoji: "⚖️" },
-    { slug: "century",   name: "100년기업스토리", emoji: "🏭" },
-    { slug: "column",    name: "정엘칼럼",       emoji: "🖋️" },
-    { slug: "tv",        name: "정엘 유튜브",     emoji: "📺" }
-  ];
-  const chName = s => (CHANNELS.find(c => c.slug === s) || {}).name || s;
-
-  async function fetchArticles(opts = {}) {
-    if (DEMO || !sb) return [];
-    let q = sb.from("articles").select("*").eq("published", true);
-    if (opts.channel) q = q.eq("channel_slug", opts.channel);
-    if (opts.featured) q = q.eq("is_featured", true);
-    if (opts.hasVideo) q = q.neq("youtube_id", "");
-    q = q.order(opts.orderBy === "views" ? "views" : "published_at", { ascending: false });
-    q = q.limit(opts.limit || 50);
-    const { data, error } = await q;
-    if (error) { console.error(error); return []; }
-    return data;
-  }
-  async function fetchArticle(id) {
-    if (DEMO || !sb) return null;
-    const { data, error } = await sb.from("articles").select("*").eq("id", id).single();
-    if (error) { console.error(error); return null; }
-    sb.rpc("increment_views", { article_id: id }).then(() => {});
-    return data;
-  }
-  function fmtDate(d) { if (!d) return ""; return String(d).slice(0, 10).replaceAll("-", "."); }
-  function thumbStyle(a) {
-    if (a.thumbnail_url) return `style="background-image:url('${a.thumbnail_url}')"`;
-    if (a.youtube_id) return `style="background-image:url('https://img.youtube.com/vi/${a.youtube_id}/hqdefault.jpg')"`;
-    return "";
-  }
-  function thumbClass(a) {
-    if (a.thumbnail_url || a.youtube_id) return "";
-    return ["g1","g2","g3","g4","g5","g6"][Math.abs(hash(a.id || a.title)) % 6];
-  }
-  function hash(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) | 0; return h; }
-  function iconOf(a) { return (a.thumbnail_url || a.youtube_id) ? "" : `<span class="icon">${(CHANNELS.find(c=>c.slug===a.channel_slug)||{}).emoji || "📰"}</span>`; }
-
-  function renderHeader(active) {
-    const today = new Date();
-    const days = ["일","월","화","수","목","금","토"];
-    const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${days[today.getDay()]}요일`;
-    const lSvg = `<svg class="l-mark" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 7,7 7,33 30,33 30,40 0,40" fill="#C0111F"/></svg>`;
-    const nav = CHANNELS.map(c =>
-      c.slug === "tv"
-        ? `<li><a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">${c.name}</a></li>`
-        : `<li><a href="channel.html?ch=${c.slug}" class="${active===c.slug?"active":""}">${c.name}</a></li>`).join("");
-    document.getElementById("site-header").innerHTML = `
-      <div class="topbar"><div class="container">
-        <span class="reg">${dateStr} · ${C.REG_NO || "인터넷신문 (등록 준비 중)"}</span>
-        <span class="util"><a href="mailto:${C.EMAIL}">광고문의</a><a href="mailto:${C.EMAIL}">기사제보</a><a href="admin.html">로그인</a></span>
-      </div></div>
-      <header class="masthead"><div class="container">
-        <a href="index.html" class="brand"><span>
-          <span class="logo"><span class="wordmark">정엘</span>
-            <span class="l-block">${lSvg}<span class="sub">미디어<br>MEDIA</span></span></span>
-          <div class="brand-slogan">가업승계 그 이상, <b>100년 기업</b>의 이야기를 잇는 경제신문</div>
-        </span></a>
-        <div class="head-cta">
-          <a href="${C.INSTITUTE_URL||"#"}" class="btn btn-outline">무료 승계진단</a>
-          <a href="${C.KAKAO_CHANNEL_URL||"#"}" class="btn btn-red">구독하기</a>
-        </div>
-      </div></header>
-      <nav class="gnb"><div class="container"><ul>
-        <li><a href="index.html" class="${active==="home"?"active":""}">홈</a></li>
-        ${nav}
-        <li class="premier"><a href="${C.INSTITUTE_URL||"#"}">PREMIER</a></li>
-      </ul></div></nav>`;
-  }
-
-  function renderFooter() {
-    const lSvg = `<svg class="l-mark" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 7,7 7,33 30,33 30,40 0,40" fill="#C0111F"/></svg>`;
-    document.getElementById("site-footer").innerHTML = `
-      <div class="container">
-        <div class="f-top">
-          <div class="f-brand">
-            <span class="logo"><span class="wordmark">정엘</span>
-              <span class="l-block">${lSvg}<span class="sub">미디어<br>MEDIA</span></span></span>
-            <p>가업승계 그 이상, 100년 기업의 이야기를 잇는 경제신문.<br>기대 이상의 가치와 진심을 드립니다.</p>
-          </div>
-          <div><h5>바로가기</h5><ul>
-            <li><a href="index.html">정엘미디어 홈</a></li>
-            <li><a href="${C.INSTITUTE_URL||"#"}">정엘가업승계연구소</a></li>
-            <li><a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">정엘 유튜브</a></li>
-            <li><a href="mailto:${C.EMAIL}">광고문의·제보</a></li>
-          </ul></div>
-          <div><h5>정책</h5><ul>
-            <li><a href="#">이용약관</a></li>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">청소년보호정책</a></li>
-          </ul></div>
-          <div class="f-info"><h5>매체 정보</h5><table>
-            <tr><td>등록번호</td><td>${C.REG_NO||"(등록 후 기재)"}</td></tr>
-            <tr><td>발행인</td><td>${C.PUBLISHER||""}</td></tr>
-            <tr><td>편집인</td><td>${C.EDITOR||""}</td></tr>
-            <tr><td>청소년보호책임자</td><td>${C.YOUTH_OFFICER||""}</td></tr>
-            <tr><td>이메일</td><td>${C.EMAIL||""}</td></tr>
-            <tr><td>주소</td><td>${C.ADDRESS||""}</td></tr>
-            <tr><td>전화</td><td>${C.PHONE||""}</td></tr>
-          </table></div>
-        </div>
-        <div class="f-bottom">
-          <span>© ${new Date().getFullYear()} 정엘미디어 · 정엘가업승계연구소. All rights reserved.</span>
-          <span>본지 기사는 저작권법의 보호를 받습니다. 무단 전재·복사·배포 금지.</span>
-        </div>
-      </div>`;
-  }
-
-  window.JUNGL = { sb, DEMO, CHANNELS, chName, fetchArticles, fetchArticle, fmtDate, thumbStyle, thumbClass, iconOf, renderHeader, renderFooter };
-})();
-</script>
+<script src="common.js"></script>
 <script>
 (async function () {
   const J = window.JUNGL, C = window.JUNGL_CONFIG;
   J.renderHeader("home");
   J.renderFooter();
   document.getElementById("bn-institute").href = C.INSTITUTE_URL || "#";
-  document.getElementById("bn-premier").href = C.INSTITUTE_URL || "#";
-  document.getElementById("bn-kakao").href = C.KAKAO_CHANNEL_URL || "#";
+  document.getElementById("bn-premier").href = "premier.html";
+  document.getElementById("bn-kakao").href = "subscribe.html";
   document.getElementById("tv-yt").href = C.YOUTUBE_URL || "#";
 
+  // 채널 칩
   document.getElementById("channel-chips").innerHTML = J.CHANNELS.map(c =>
-    c.slug === "tv"
-      ? `<a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">${c.emoji} ${c.name}</a>`
-      : `<a href="channel.html?ch=${c.slug}">${c.emoji} ${c.name}</a>`).join("");
+    `<a href="channel.html?ch=${c.slug}">${c.emoji} ${c.name}</a>`).join("");
 
+  // 히어로 (주요기사 6건)
   const feats = await J.fetchArticles({ featured: true, limit: 6 });
   const heroHtml = feats.map((a, i) => `
     <a href="article.html?id=${a.id}" class="card ${i===0?"main":""}">
@@ -421,9 +131,10 @@ window.JUNGL_CONFIG = {
       </div>
     </a>`).join("");
   document.getElementById("hero-grid").innerHTML = heroHtml ||
-    `<p style="grid-column:1/-1;color:#98908d;padding:30px 0">아직 등록된 주요 기사가 없습니다.</p>`;
+    `<p style="grid-column:1/-1;color:#98908d;padding:30px 0">아직 등록된 주요 기사가 없습니다. 관리자 페이지에서 기사를 발행해 주세요.</p>`;
 
-  const latest = await J.fetchArticles({ limit: 8 });
+  // 최신 기사
+  const latest = await J.fetchArticles({ limit: 6 });
   document.getElementById("latest-list").innerHTML = latest.map(a => `
     <article class="article-row">
       <a class="thumb-s ${J.thumbClass(a)}" ${J.thumbStyle(a)} href="article.html?id=${a.id}">${J.iconOf(a)}</a>
@@ -435,11 +146,13 @@ window.JUNGL_CONFIG = {
       </div>
     </article>`).join("");
 
+  // 인기 기사 (조회수순 5건)
   const pops = await J.fetchArticles({ orderBy: "views", limit: 5 });
   document.getElementById("rank-list").innerHTML = pops.map((a, i) => `
     <li><span class="no">${i+1}</span>
       <a href="article.html?id=${a.id}"><span class="c">${J.chName(a.channel_slug)}</span>${a.title}</a></li>`).join("");
 
+  // 정엘TV (유튜브 영상 있는 기사)
   const vids = await J.fetchArticles({ hasVideo: true, limit: 5 });
   if (vids.length) {
     document.getElementById("tv-box").style.display = "block";

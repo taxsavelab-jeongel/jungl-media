@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광고문의·기사제보 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.ct-wrap{max-width:860px;margin:0 auto;padding:60px 20px 90px}
+.ct-wrap h1{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:var(--brown);text-align:center;margin-bottom:10px}
+.ct-wrap .desc{text-align:center;font-size:14.5px;color:var(--txt-gray);margin-bottom:40px}
+.ct-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ct-card{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--red);border-radius:10px;padding:30px 26px}
+.ct-card h2{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900;color:var(--brown);margin-bottom:8px}
+.ct-card .sub{font-size:13.5px;color:var(--txt-gray);line-height:1.7;margin-bottom:20px}
+.ct-line{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.ct-line:last-of-type{border-bottom:none}
+.ct-line .ic{flex:0 0 34px;height:34px;background:var(--bluegray);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.ct-line b{color:var(--brown);min-width:66px;font-size:13px}
+.ct-line a{color:var(--ink);font-weight:500}
+.ct-line a:hover{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+.ct-note{margin-top:26px;background:var(--bluegray);border-radius:8px;padding:18px 20px;font-size:13px;color:#5b707c;line-height:1.75}
+@media(max-width:760px){.ct-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="ct-wrap">
+  <h1>광고문의 · 기사제보</h1>
+  <p class="desc">정엘미디어는 광고 제휴와 독자 여러분의 소중한 제보를 기다립니다.</p>
+
+  <div class="ct-grid">
+    <div class="ct-card">
+      <h2>📢 광고문의</h2>
+      <p class="sub">배너 광고, 협찬 기사, 세미나·행사 홍보 등<br>광고 제휴를 문의해 주세요.</p>
+      <div class="ct-line"><span class="ic">📧</span><b>이메일</b><a href="mailto:taxsavelab@gmail.com?subject=[광고문의] ">taxsavelab@gmail.com</a></div>
+      <div class="ct-line"><span class="ic">📞</span><b>전화</b><a href="tel:02-523-3757">02-523-3757</a></div>
+      <div class="ct-line"><span class="ic">💬</span><b>문자문의</b><a href="sms:010-5000-9632">010-5000-9632</a></div>
+    </div>
+
+    <div class="ct-card">
+      <h2>🚨 기사제보</h2>
+      <p class="sub">가업승계·세무 관련 제보, 취재 요청,<br>보도자료를 보내주세요.</p>
+      <div class="ct-line"><span class="ic">📧</span><b>이메일</b><a href="mailto:taxsavelab@gmail.com?subject=[기사제보] ">taxsavelab@gmail.com</a></div>
+      <div class="ct-line"><span class="ic">📞</span><b>대표번호</b><a href="tel:02-523-3757">02-523-3757</a></div>
+      <div class="ct-line"><span class="ic">💬</span><b>문자제보</b><a href="sms:010-5000-9632">010-5000-9632</a></div>
+    </div>
+  </div>
+
+  <div class="ct-note">
+    · 이메일 문의 시 제목에 [광고문의] 또는 [기사제보]를 붙여주시면 더 빠르게 처리됩니다.<br>
+    · 제보자의 신원은 취재원 보호 원칙에 따라 철저히 보호됩니다.<br>
+    · 전화 연결이 어려운 시간에는 문자를 남겨주시면 확인 후 연락드립니다.
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREMIER - 정엘미디어</title>
+<meta name="description" content="차원이 다른 절세 해법, 정엘 프리미어 — 100년 기업 아키텍트의 프리미엄 승계·절세 설계">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+/* PREMIER 전용 스타일 */
+.pm-hero{background:linear-gradient(135deg,#241009,#381513 60%,#4a201a);color:#fff;text-align:center;padding:80px 20px 70px}
+.pm-hero .pre{font-size:13px;font-weight:700;letter-spacing:5px;color:var(--gold-light);margin-bottom:16px}
+.pm-hero h1{font-family:'Noto Serif KR',serif;font-size:38px;font-weight:900;line-height:1.35;letter-spacing:-.5px}
+.pm-hero h1 em{color:var(--gold-light);font-style:normal}
+.pm-hero p{font-size:15.5px;color:#c9b8b3;margin-top:18px;line-height:1.8}
+.pm-sec{padding:64px 0}
+.pm-sec.alt{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pm-sec .container{max-width:960px}
+.pm-label{text-align:center;font-size:12px;font-weight:900;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.pm-sec h2{font-family:'Noto Serif KR',serif;text-align:center;font-size:28px;font-weight:900;color:var(--brown);letter-spacing:-.5px;margin-bottom:14px}
+.pm-sec .intro{text-align:center;font-size:15.5px;color:var(--txt-gray);line-height:1.85;max-width:640px;margin:0 auto 40px}
+.pm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pm-card{background:var(--bg);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:8px;padding:26px 22px}
+.pm-sec.alt .pm-card{background:var(--white)}
+.pm-card .num{font-size:12px;font-weight:900;color:var(--gold);letter-spacing:2px}
+.pm-card h3{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:900;color:var(--brown);margin:6px 0 10px}
+.pm-card p{font-size:13.5px;color:var(--txt-gray);line-height:1.7}
+.pm-fields{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pm-field{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:22px 14px;text-align:center}
+.pm-field .em{font-size:26px;margin-bottom:8px}
+.pm-field b{display:block;font-size:14.5px;color:var(--brown);margin-bottom:5px}
+.pm-field span{font-size:12px;color:var(--txt-light);line-height:1.5;display:block}
+.pm-cta{background:linear-gradient(135deg,var(--gold),#6e5f45);color:#fff;text-align:center;padding:60px 20px}
+.pm-cta h2{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;margin-bottom:10px}
+.pm-cta p{font-size:14px;opacity:.9;margin-bottom:24px}
+.pm-cta a{display:inline-block;background:#fff;color:#6e5f45;font-weight:700;font-size:15px;padding:14px 34px;border-radius:4px}
+.pm-note{text-align:center;font-size:12px;color:var(--txt-light);padding:18px 20px 0}
+@media(max-width:900px){.pm-grid{grid-template-columns:1fr}.pm-fields{grid-template-columns:repeat(2,1fr)}.pm-hero h1{font-size:28px}}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<!-- 히어로 -->
+<div class="pm-hero">
+  <div class="pre">JEONGEL PREMIERE</div>
+  <h1>세금을 줄이는 것을 넘어,<br><em>기업의 다음 100년</em>을 설계합니다</h1>
+  <p>자산과 사업의 규모가 커질수록 승계와 절세는 하나의 기술이 아니라 종합 설계의 문제가 됩니다.<br>
+  정엘 프리미어는 복잡하고 규모 있는 사안을 다루는 정엘가업승계연구소의 최상위 서비스입니다.</p>
+</div>
+
+<!-- 아키텍트 철학 -->
+<section class="pm-sec">
+  <div class="container">
+    <div class="pm-label">ARCHITECT</div>
+    <h2>컨설턴트가 아니라, 아키텍트</h2>
+    <p class="intro">
+      주어진 질문에 답만 하는 것은 컨설팅입니다. 정엘은 질문 이전의 구조를 봅니다.
+      지배구조·주식·세금·사람을 하나의 도면 위에 놓고, 승계 이후의 번영까지 담아 설계하는 것 —
+      정엘이 스스로를 '100년 기업 아키텍트'라 부르는 이유입니다.
+    </p>
+    <div class="pm-grid">
+      <div class="pm-card"><div class="num">01</div><h3>진단이 먼저입니다</h3>
+        <p>회사의 지분 구조, 자산 구성, 세무 리스크를 입체적으로 진단한 뒤에야 설계를 시작합니다. 처방보다 진단에 더 많은 시간을 씁니다.</p></div>
+      <div class="pm-card"><div class="num">02</div><h3>설계는 맞춤입니다</h3>
+        <p>같은 업종, 같은 규모라도 답은 다릅니다. 각 분야 전문가가 협업해 그 회사만의 실행 가능한 도면을 그립니다.</p></div>
+      <div class="pm-card"><div class="num">03</div><h3>실행 후에도 함께합니다</h3>
+        <p>설계는 실행되어야 가치가 있습니다. 실행 이후에도 세무·노무·법무 자문으로 기업을 지속 관리합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 서비스 영역 -->
+<section class="pm-sec alt">
+  <div class="container">
+    <div class="pm-label">FIELDS</div>
+    <h2>프리미어가 다루는 영역</h2>
+    <p class="intro">규모가 크고 구조가 복잡해 정교한 설계가 필요한 사안을 다룹니다.</p>
+    <div class="pm-fields">
+      <div class="pm-field"><div class="em">🏢</div><b>IPO · M&amp;A</b><span>상장과 인수합병<br>국면의 지분·세금 설계</span></div>
+      <div class="pm-field"><div class="em">🏛️</div><b>가업승계</b><span>지원제도 활용부터<br>지배구조 재편까지</span></div>
+      <div class="pm-field"><div class="em">🧾</div><b>법인세 절세</b><span>법인 단계의<br>종합 절세 구조 설계</span></div>
+      <div class="pm-field"><div class="em">📊</div><b>자기주식</b><span>자기주식 취득·소각을<br>활용한 자본 설계</span></div>
+      <div class="pm-field"><div class="em">🤝</div><b>사내근로복지기금</b><span>기금을 활용한<br>복지·절세 통합 설계</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 진행 방식 -->
+<section class="pm-sec">
+  <div class="container">
+    <div class="pm-label">PROCESS</div>
+    <h2>이렇게 진행됩니다</h2>
+    <div class="pm-grid">
+      <div class="pm-card"><div class="num">STEP 1</div><h3>상담과 맞춤 제안</h3>
+        <p>신청 후 연구소에서 연락을 드리고, 대면 상담으로 상황을 정확히 파악한 뒤 회사에 맞는 솔루션을 제안합니다.</p></div>
+      <div class="pm-card"><div class="num">STEP 2</div><h3>솔루션 실행</h3>
+        <p>제안에 만족하시면 컨설팅 계약 후 각 분야 전문가가 협업해 솔루션을 실행합니다. 사안에 따라 단건 또는 연간 방식으로 진행됩니다.</p></div>
+      <div class="pm-card"><div class="num">STEP 3</div><h3>기업 돌봄</h3>
+        <p>실행 이후에도 세무·노무·법무에 대한 지속적인 자문과 관리가 이어집니다. 승계는 끝이 아니라 시작이기 때문입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="pm-cta">
+  <h2>차원이 다른 절세 해법이 필요하십니까?</h2>
+  <p>정엘 아키텍트가 회사의 상황을 직접 진단해 드립니다.</p>
+  <a href="#" id="pm-apply" target="_blank" rel="noopener">프리미어 상담 신청 →</a>
+  <div class="pm-note" style="color:rgba(255,255,255,.75)">상담 신청은 정엘가업승계연구소 홈페이지로 연결됩니다.</div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL, C = window.JUNGL_CONFIG;
+  J.renderHeader("premier");
+  J.renderFooter();
+  document.getElementById("pm-apply").href = C.PREMIER_URL || C.INSTITUTE_URL || "#";
+})();
+</script>
+</body>
+</html>
