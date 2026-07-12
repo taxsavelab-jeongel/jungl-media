@@ -86,10 +86,10 @@
 
     <!-- 기자 신청 관리 -->
     <div class="admin-card" id="applicant-card" style="display:none">
-      <h2>🧑‍💼 기자 신청 관리</h2>
-      <p style="font-size:13px;color:#6b625f;margin:-4px 0 12px">기자단 신청자입니다. 승인하면 AI 도우미로 기사를 작성할 수 있습니다.</p>
+      <h2>🧑‍💼 기자단·전문가 신청 관리</h2>
+      <p style="font-size:13px;color:#6b625f;margin:-4px 0 12px">기자단·전문가 신청자입니다. 승인하면 AI 도우미로 기사를 작성할 수 있습니다. 전문가 필진의 기사에는 이름·직함·소속이 서명으로 표기됩니다.</p>
       <table class="admin-list">
-        <thead><tr><th>필명</th><th>이메일/연락처</th><th>소개·경력</th><th>관리</th></tr></thead>
+        <thead><tr><th>구분</th><th>이름/필명</th><th>이메일/연락처</th><th>소개·경력</th><th>관리</th></tr></thead>
         <tbody id="applicant-body"></tbody>
       </table>
     </div>
@@ -278,6 +278,9 @@
     $("applicant-card").style.display = rows.length ? "block" : "none";
     $("applicant-body").innerHTML = rows.map(p => `
       <tr>
+        <td>${p.reporter_type === "expert"
+          ? '<b style="color:#1a5c8f">전문가</b><div style="font-size:11px;color:#6b625f">' + (p.reporter_title || "") + '<br>' + (p.reporter_org || "") + '</div>'
+          : '기자'}</td>
         <td>${p.reporter_pen_name || "(미기재)"}</td>
         <td style="font-size:12px">${p.email || ""}<br>${p.phone || ""}</td>
         <td style="font-size:12px;max-width:280px">${(p.reporter_bio || "").replace(/</g,"&lt;")}</td>
