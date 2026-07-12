@@ -7,7 +7,7 @@ window.JUNGL_CONFIG = {
 
   // 사이트 기본 정보
   SITE_NAME: "정엘미디어",
-  SLOGAN: "가업승계 그 이상, 100년 기업의 이야기를 잇는 경제신문",
+  SLOGAN: "중소기업 오너를 위한 가업승계·절세 전문 신문",
   REG_NO: "등록번호 (등록 후 기재)",
   PUBLISHER: "정선의",
   EDITOR: "우예슬",

@@ -3,102 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>정엘미디어 - 가업승계 그 이상, 100년 기업의 이야기</title>
-<meta name="description" content="가업승계·절세·지배구조를 깊이 있게 다루는 전문 경제신문 정엘미디어">
-<meta property="og:title" content="정엘미디어 - 가업승계 그 이상, 100년 기업의 이야기">
-<meta property="og:description" content="가업승계·절세·지배구조 전문 경제신문">
+<title>정엘미디어 - 중소기업 오너를 위한 전문 신문</title>
+<meta name="description" content="가업승계·절세·지배구조를 깊이 있게 다루는 중소기업 오너 전문 신문 정엘미디어">
+<meta property="og:title" content="정엘미디어 - 중소기업 오너를 위한 전문 신문">
+<meta property="og:description" content="가업승계·절세·지배구조 전문 신문">
 <meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<style>
+/* ── 신문형 메인 전용 스타일 ── */
+.np-wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.np-top{display:grid;grid-template-columns:1.6fr 1.1fr 0.9fr;gap:0;border-bottom:2px solid var(--brown);padding:26px 0 22px}
+.np-col{padding:0 22px}
+.np-col:first-child{padding-left:0}
+.np-col:last-child{padding-right:0}
+.np-col+.np-col{border-left:1px solid var(--line)}
+/* 톱기사 */
+.np-lead a:hover h1{color:var(--red)}
+.np-lead .cat{font-size:12px;font-weight:700;color:var(--red);letter-spacing:.5px}
+.np-lead h1{font-family:'Noto Serif KR',serif;font-size:30px;font-weight:900;line-height:1.35;letter-spacing:-.5px;color:#1a1108;margin:6px 0 10px}
+.np-lead .lede{font-size:14.5px;color:var(--txt-gray);line-height:1.7;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.np-lead .by{font-size:12px;color:var(--txt-light)}
+.np-lead .thumb-lead{height:210px;border-radius:4px;margin:12px 0 4px;position:relative;overflow:hidden;background-size:cover;background-position:center}
+.np-lead .thumb-lead .icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:52px;opacity:.4}
+.np-sub{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.np-sub h3{font-family:'Noto Serif KR',serif;font-size:16.5px;font-weight:700;line-height:1.45;letter-spacing:-.3px;margin-bottom:4px}
+.np-sub h3 a:hover{color:var(--red)}
+.np-sub p{font-size:12.5px;color:var(--txt-gray);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* 주요뉴스 목록 */
+.np-h{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:var(--brown);padding-bottom:8px;border-bottom:2px solid var(--red);margin-bottom:4px;display:flex;justify-content:space-between;align-items:baseline}
+.np-h a{font-size:11.5px;color:var(--txt-light);font-family:'Noto Sans KR',sans-serif;font-weight:400}
+.np-list{list-style:none}
+.np-list li{padding:10px 0;border-bottom:1px solid #eee9e4}
+.np-list li:last-child{border-bottom:none}
+.np-list h4{font-size:14.5px;font-weight:700;line-height:1.45;letter-spacing:-.3px}
+.np-list h4 a:hover{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+.np-list .sub{font-size:12px;color:var(--txt-gray);margin-top:2px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.np-list .meta{font-size:11px;color:var(--txt-light);margin-top:3px}
+/* 우측 사이드 */
+.np-rank{list-style:none}
+.np-rank li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #eee9e4;align-items:flex-start}
+.np-rank li:last-child{border-bottom:none}
+.np-rank .no{flex:0 0 20px;font-family:'Noto Serif KR',serif;font-size:17px;font-weight:900;color:var(--red);line-height:1.3}
+.np-rank a{font-size:13px;line-height:1.45;letter-spacing:-.2px}
+.np-rank a:hover{text-decoration:underline;text-underline-offset:3px}
+.np-newest{list-style:none}
+.np-newest li{padding:7px 0;border-bottom:1px dashed #eee9e4;font-size:13px;line-height:1.45}
+.np-newest li:last-child{border-bottom:none}
+.np-newest .t{color:var(--txt-light);font-size:11px;margin-right:6px}
+.np-newest a:hover{text-decoration:underline;text-underline-offset:3px}
+.np-side-box{margin-bottom:22px}
+/* 섹션 지면 */
+.np-sections{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding:26px 0;border-bottom:1px solid var(--line)}
+.np-sec{padding:0 22px}
+.np-sec:nth-child(3n+1){padding-left:0;border-left:none}
+.np-sec:nth-child(3n){padding-right:0}
+.np-sec+.np-sec{border-left:1px solid var(--line)}
+.np-sec .first h4{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;line-height:1.4;letter-spacing:-.3px;margin:10px 0 4px}
+.np-sec .first h4 a:hover{color:var(--red)}
+.np-sec .first p{font-size:12.5px;color:var(--txt-gray);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.np-sec ul{list-style:none;margin-top:4px}
+.np-sec ul li{padding:6px 0;border-top:1px solid #f0ebe6;font-size:13.5px;line-height:1.45;letter-spacing:-.2px}
+.np-sec ul li:before{content:"·";color:var(--red);font-weight:900;margin-right:6px}
+.np-sec ul li a:hover{text-decoration:underline;text-underline-offset:3px}
+.np-row2{border-bottom:1px solid var(--line);padding:26px 0;display:grid;grid-template-columns:2fr 1fr;gap:0}
+.np-row2 .np-col2{padding:0 22px}
+.np-row2 .np-col2:first-child{padding-left:0}
+.np-row2 .np-col2:last-child{padding-right:0;border-left:1px solid var(--line)}
+/* 오피니언 */
+.np-op{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.np-op .op{padding:10px 0;border-bottom:1px solid #eee9e4}
+.np-op .op h4{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;line-height:1.45;letter-spacing:-.3px}
+.np-op .op h4 a:hover{color:var(--red)}
+.np-op .op .by{font-size:11.5px;color:var(--txt-light);margin-top:3px}
+/* 유튜브 컴팩트 */
+.np-tv{display:grid;gap:12px;margin-top:10px}
+.np-tv a{display:block}
+.np-tv .th{height:90px;border-radius:4px;background-size:cover;background-position:center;position:relative}
+.np-tv .th:after{content:"▶";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;background:rgba(192,17,31,.9);width:26px;height:26px;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center}
+.np-tv h5{font-size:12.5px;font-weight:500;line-height:1.4;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* 하단 안내(광고) 박스 */
+.np-ads{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:22px 0}
+.np-ad{border:1px solid var(--line);border-radius:4px;padding:16px 18px;position:relative;background:#fdfcfa;display:block}
+.np-ad .tag{position:absolute;top:8px;right:10px;font-size:10px;color:#b3a89e;border:1px solid #ddd3c9;padding:0 4px;border-radius:2px}
+.np-ad b{font-family:'Noto Serif KR',serif;font-size:15px;color:var(--brown);display:block;margin-bottom:4px}
+.np-ad p{font-size:12px;color:var(--txt-gray);line-height:1.5;margin-bottom:8px}
+.np-ad .go{font-size:12px;font-weight:700;color:var(--red)}
+@media(max-width:960px){
+  .np-top{grid-template-columns:1fr}
+  .np-col{padding:14px 0!important;border-left:none!important;border-top:1px solid var(--line)}
+  .np-col:first-child{border-top:none}
+  .np-sections{grid-template-columns:1fr}
+  .np-sec{padding:14px 0!important;border-left:none!important;border-top:1px solid var(--line)}
+  .np-sec:first-child{border-top:none}
+  .np-row2{grid-template-columns:1fr}
+  .np-row2 .np-col2{padding:14px 0!important;border-left:none!important}
+  .np-ads{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
 <div id="site-header"></div>
 
-<!-- 매니페스토 스트립 -->
-<div class="manifesto">
-  <div class="m1">"불꽃은 <em>이어져야</em> 합니다"</div>
-  <div class="m2">세대를 넘어, 시대를 넘어, 성장이 이어지는 건강한 부를 완성합니다 — 정엘미디어</div>
+<div class="np-wrap">
+
+  <!-- 톱 3단: 헤드라인 / 주요뉴스 / 많이본·최신 -->
+  <div class="np-top">
+    <div class="np-col np-lead" id="np-lead"></div>
+    <div class="np-col">
+      <div class="np-h">주요뉴스</div>
+      <ul class="np-list" id="np-major"></ul>
+    </div>
+    <div class="np-col">
+      <div class="np-side-box">
+        <div class="np-h">많이 본 뉴스</div>
+        <ol class="np-rank" id="np-rank"></ol>
+      </div>
+      <div class="np-side-box">
+        <div class="np-h">최신뉴스</div>
+        <ul class="np-newest" id="np-newest"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 섹션 지면 1 -->
+  <div class="np-sections" id="np-sec-row1"></div>
+  <!-- 섹션 지면 2 -->
+  <div class="np-sections" id="np-sec-row2"></div>
+
+  <!-- 오피니언 + 유튜브 -->
+  <div class="np-row2">
+    <div class="np-col2">
+      <div class="np-h">오피니언 · 정엘칼럼 <a href="channel.html?ch=column">더보기 ›</a></div>
+      <div class="np-op" id="np-opinion"></div>
+    </div>
+    <div class="np-col2">
+      <div class="np-h">정엘 유튜브 <a href="#" id="np-yt-link" target="_blank" rel="noopener">채널 바로가기 ›</a></div>
+      <div class="np-tv" id="np-tv" style="grid-template-columns:1fr 1fr"></div>
+    </div>
+  </div>
+
+  <!-- 하단 안내 박스 (광고 표기) -->
+  <div class="np-ads">
+    <a class="np-ad" href="#" id="ad-consult" target="_blank" rel="noopener">
+      <span class="tag">AD</span><b>정엘가업승계연구소 상담 신청</b>
+      <p>지배구조·주식이동·세금 통합 진단. 15년, 1,000개 기업 승계 설계.</p>
+      <span class="go">상담 신청 →</span>
+    </a>
+    <a class="np-ad" href="https://docs.google.com/forms/d/e/1FAIpQLSdmpPNj6sEBfd1AYkzvaXap12EFrk3oPdxVwoQAPa0ShYlSSg/viewform" target="_blank" rel="noopener">
+      <span class="tag">무료자료</span><b>가지급금 정리 체크리스트</b>
+      <p>인정이자·상여처분·승계 리스크 10분 자가진단 PDF. 신청 즉시 이메일 발송.</p>
+      <span class="go">무료로 받기 →</span>
+    </a>
+    <a class="np-ad" href="premier.html">
+      <span class="tag">PREMIER</span><b>차원이 다른 절세 해법, 정엘 프리미어</b>
+      <p>IPO·M&amp;A, 가업승계, 법인세 절세, 자기주식, 사내근로복지기금.</p>
+      <span class="go">프리미어 안내 →</span>
+    </a>
+  </div>
+
 </div>
-
-<!-- 히어로 -->
-<section class="hero"><div class="container">
-  <div class="hero-grid" id="hero-grid"></div>
-</div></section>
-
-<!-- 실적 스트립 -->
-<div class="stats"><div class="container">
-  <div class="stat"><div class="n">15<em>년</em></div><div class="d">가업승계 한 분야 매진</div></div>
-  <div class="stat"><div class="n">1,000<em>+</em></div><div class="d">기업 승계 컨설팅 수행</div></div>
-  <div class="stat"><div class="n">5,000<em>억+</em></div><div class="d">누적 절세 금액</div></div>
-  <div class="stat"><div class="n">업계 <em>최초</em></div><div class="d">승계 전문 유튜브 채널</div></div>
-</div></div>
-
-<!-- 본문 -->
-<div class="container"><div class="layout">
-  <main>
-    <div class="section-head"><h2>최신 기사</h2><a href="#" class="more" id="more-latest">더보기 →</a></div>
-    <div id="latest-list"></div>
-
-    <!-- 정엘TV -->
-    <div class="tv" id="tv-box" style="display:none">
-      <div class="tv-head"><h2>정엘 <span>유튜브</span></h2><a href="#" id="tv-yt" target="_blank" rel="noopener">유튜브 채널 바로가기 →</a></div>
-      <div class="tv-sub">업계 최초 가업승계 전문 유튜브 채널</div>
-      <div id="tv-main"></div>
-      <div class="tv-strip" id="tv-strip"></div>
-    </div>
-
-    <!-- L 가치 -->
-    <div class="section-head" style="margin-top:40px"><h2>정엘의 <span class="l">L</span> — 우리가 일하는 방식</h2></div>
-    <div class="lvalues">
-      <div class="lv"><div class="en">LOYAL · TRUSTWORTHY</div><div class="ko">믿음직한</div>
-        <p>고객과의 약속을 끝까지 지키며, 책임감을 가지고 고객의 문제를 끝까지 해결합니다.</p></div>
-      <div class="lv"><div class="en">LEAP · UNDERSTATED</div><div class="ko">절제된 품격</div>
-        <p>애써 포장하지 않아도 자연스럽게 깊이가 느껴지는, 성숙함에서 우러나오는 우아함.</p></div>
-      <div class="lv"><div class="en">LEAD · BEST IN CLASS</div><div class="ko">탁월한</div>
-        <p>고객의 기대를 넘어 감탄을 자아내는, 타의 추종을 불허하는 완전히 다른 차원의 완성도.</p></div>
-    </div>
-  </main>
-
-  <aside>
-    <div class="box"><h3>🔥 이번주 인기 기사</h3><ol class="rank" id="rank-list"></ol></div>
-
-    <a class="banner bn-brown" href="#" id="bn-institute">
-      <span class="tag">정엘가업승계연구소</span>
-      <div class="pre">JUNG-L INSTITUTE</div>
-      <h4>가업승계 그 이상,<br><em>100년 기업 아키텍트</em></h4>
-      <p>실력으로 시작하고 진심으로 마무리합니다.<br>지배구조·주식이동·세금 통합 진단</p>
-      <span class="bbtn">상담 신청 →</span>
-    </a>
-
-    <a class="banner bn-gold" href="premier.html" id="bn-premier">
-      <span class="tag">JEONGEL PREMIERE</span>
-      <div class="pre">PREMIER</div>
-      <h4>차원이 다른 절세 해법,<br>정엘 프리미어</h4>
-      <p>IPO·M&amp;A, 가업승계, 법인세 절세, 자기주식,<br>사내근로복지기금 — 정엘 아키텍트가 설계합니다</p>
-      <span class="bbtn">프리미어 상담 신청 →</span>
-    </a>
-
-    <a class="banner bn-brown" href="https://docs.google.com/forms/d/e/1FAIpQLSdmpPNj6sEBfd1AYkzvaXap12EFrk3oPdxVwoQAPa0ShYlSSg/viewform" target="_blank" rel="noopener">
-      <span class="tag">무료 자료</span>
-      <div class="pre">FREE PDF</div>
-      <h4>가지급금 정리 체크리스트<br><em>무료 다운로드</em></h4>
-      <p>인정이자·상여처분·승계 리스크 10분 자가진단.<br>신청 즉시 이메일로 PDF를 보내드립니다.</p>
-      <span class="bbtn">무료로 받기 →</span>
-    </a>
-
-    <div class="subscribe">
-      <div class="em">📧</div>
-      <h4>정엘미디어 구독</h4>
-      <p>새 기사와 승계·절세 소식을 이메일로 받아보세요!</p>
-      <a href="subscribe.html" id="bn-kakao">이메일 구독 신청 (무료)</a>
-    </div>
-
-    <div class="box"><h3>📂 채널 바로가기</h3><div class="chips" id="channel-chips"></div></div>
-  </aside>
-</div></div>
 
 <footer id="site-footer"></footer>
 
@@ -108,63 +175,86 @@
   const J = window.JUNGL, C = window.JUNGL_CONFIG;
   J.renderHeader("home");
   J.renderFooter();
-  document.getElementById("bn-institute").href = C.INSTITUTE_URL || "#";
-  document.getElementById("bn-premier").href = "premier.html";
-  document.getElementById("bn-kakao").href = "subscribe.html";
-  document.getElementById("tv-yt").href = C.YOUTUBE_URL || "#";
+  document.getElementById("np-yt-link").href = C.YOUTUBE_URL || "#";
+  document.getElementById("ad-consult").href = C.CONSULT_URL || C.INSTITUTE_URL || "#";
 
-  // 채널 칩
-  document.getElementById("channel-chips").innerHTML = J.CHANNELS.map(c =>
-    `<a href="channel.html?ch=${c.slug}">${c.emoji} ${c.name}</a>`).join("");
+  const all = await J.fetchArticles({ limit: 80 });
+  const feats = all.filter(a => a.is_featured);
+  const byCh = s => all.filter(a => a.channel_slug === s);
+  const fmt = J.fmtDate;
 
-  // 히어로 (주요기사 6건)
-  const feats = await J.fetchArticles({ featured: true, limit: 6 });
-  const heroHtml = feats.map((a, i) => `
-    <a href="article.html?id=${a.id}" class="card ${i===0?"main":""}">
-      <div class="thumb ${J.thumbClass(a)}" ${J.thumbStyle(a)}>${J.iconOf(a)}</div>
-      <div class="overlay"></div>
-      <div class="meta">
-        <span class="chip">${J.chName(a.channel_slug)}</span>
-        <h3>${a.title}</h3>
-        ${i===0 && a.lede ? `<p class="lede">${a.lede}</p>` : ""}
-        <div class="by">${a.author||""} · ${J.fmtDate(a.published_at)}</div>
-      </div>
-    </a>`).join("");
-  document.getElementById("hero-grid").innerHTML = heroHtml ||
-    `<p style="grid-column:1/-1;color:#98908d;padding:30px 0">아직 등록된 주요 기사가 없습니다. 관리자 페이지에서 기사를 발행해 주세요.</p>`;
-
-  // 최신 기사
-  const latest = await J.fetchArticles({ limit: 6 });
-  document.getElementById("latest-list").innerHTML = latest.map(a => `
-    <article class="article-row">
-      <a class="thumb-s ${J.thumbClass(a)}" ${J.thumbStyle(a)} href="article.html?id=${a.id}">${J.iconOf(a)}</a>
-      <div>
-        <span class="cat">${J.chName(a.channel_slug)}</span>
-        <h3><a href="article.html?id=${a.id}">${a.title}</a></h3>
-        <p>${a.lede||""}</p>
-        <div class="by">${a.author||""} · ${J.fmtDate(a.published_at)}</div>
-      </div>
-    </article>`).join("");
-
-  // 인기 기사 (조회수순 5건)
-  const pops = await J.fetchArticles({ orderBy: "views", limit: 5 });
-  document.getElementById("rank-list").innerHTML = pops.map((a, i) => `
-    <li><span class="no">${i+1}</span>
-      <a href="article.html?id=${a.id}"><span class="c">${J.chName(a.channel_slug)}</span>${a.title}</a></li>`).join("");
-
-  // 정엘TV (유튜브 영상 있는 기사)
-  const vids = await J.fetchArticles({ hasVideo: true, limit: 5 });
-  if (vids.length) {
-    document.getElementById("tv-box").style.display = "block";
-    const m = vids[0];
-    document.getElementById("tv-main").innerHTML = `
-      <a class="tv-main" href="article.html?id=${m.id}" style="display:block;background-image:url('https://img.youtube.com/vi/${m.youtube_id}/hqdefault.jpg')">
-        <div class="play">▶</div>
-        <div class="cap"><h3>${m.title}</h3></div>
-      </a>`;
-    document.getElementById("tv-strip").innerHTML = vids.slice(1, 5).map(v => `
-      <a class="t" href="article.html?id=${v.id}" style="background-image:url('https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg')"><span class="icon">▶</span></a>`).join("");
+  // ① 헤드라인 톱 + 서브 2건
+  const lead = feats[0] || all[0];
+  if (lead) {
+    const subs = (feats.slice(1,3).length ? feats.slice(1,3) : all.slice(1,3));
+    document.getElementById("np-lead").innerHTML = `
+      <a href="article.html?id=${lead.id}">
+        <span class="cat">${J.chName(lead.channel_slug)}</span>
+        <h1>${lead.title}</h1>
+        <p class="lede">${lead.lede||""}</p>
+        <div class="by">${lead.author||""} · ${fmt(lead.published_at)}</div>
+        <div class="thumb-lead ${J.thumbClass(lead)}" ${J.thumbStyle(lead)}>${J.iconOf(lead)}</div>
+      </a>
+      ${subs.map(a=>`<div class="np-sub"><h3><a href="article.html?id=${a.id}">${a.title}</a></h3><p>${a.lede||""}</p></div>`).join("")}`;
   }
+
+  // ② 주요뉴스
+  const used = new Set([lead && lead.id, ...(feats.slice(1,3).map(a=>a.id))].filter(Boolean));
+  const major = all.filter(a=>!used.has(a.id)).slice(0,7);
+  document.getElementById("np-major").innerHTML = major.map(a=>`
+    <li><h4><a href="article.html?id=${a.id}">${a.title}</a></h4>
+    <div class="sub">${a.lede||""}</div>
+    <div class="meta">${J.chName(a.channel_slug)} · ${fmt(a.published_at)}</div></li>`).join("");
+
+  // ③ 많이 본 뉴스
+  const pops = [...all].sort((x,y)=>(y.views||0)-(x.views||0)).slice(0,5);
+  document.getElementById("np-rank").innerHTML = pops.map((a,i)=>`
+    <li><span class="no">${i+1}</span><a href="article.html?id=${a.id}">${a.title}</a></li>`).join("");
+
+  // ④ 최신뉴스
+  document.getElementById("np-newest").innerHTML = all.slice(0,6).map(a=>`
+    <li><span class="t">${fmt(a.published_at).slice(5)}</span><a href="article.html?id=${a.id}">${a.title}</a></li>`).join("");
+
+  // ⑤ 섹션 지면
+  function secBox(slug){
+    const meta = J.CHANNELS.find(c=>c.slug===slug); const rows = byCh(slug);
+    if(!rows.length) return "";
+    const first = rows[0], rest = rows.slice(1,5);
+    return `<div class="np-sec">
+      <div class="np-h">${meta.name} <a href="channel.html?ch=${slug}">더보기 ›</a></div>
+      <div class="first">
+        <h4><a href="article.html?id=${first.id}">${first.title}</a></h4>
+        <p>${first.lede||""}</p>
+      </div>
+      <ul>${rest.map(a=>`<li><a href="article.html?id=${a.id}">${a.title}</a></li>`).join("")}</ul>
+    </div>`;
+  }
+  document.getElementById("np-sec-row1").innerHTML = ["architect","taxbrief","taxsaving"].map(secBox).join("");
+  document.getElementById("np-sec-row2").innerHTML = ["caselaw","century"].map(secBox).join("") + `
+    <div class="np-sec">
+      <div class="np-h">구독 · 회원</div>
+      <div class="first"><h4>매주 월요일, 오너를 위한 뉴스레터</h4>
+      <p>새 기사와 가업승계·절세 소식을 이메일로 보내드립니다. 회원 가입 시 가지급금 체크리스트 PDF 증정.</p></div>
+      <ul>
+        <li><a href="subscribe.html">이메일 뉴스레터 구독 (무료)</a></li>
+        <li><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener">정엘미디어 회원가입</a></li>
+        <li><a href="contact.html">광고문의 · 기사제보</a></li>
+      </ul>
+    </div>`;
+
+  // ⑥ 오피니언
+  const cols = byCh("column").slice(0,6);
+  document.getElementById("np-opinion").innerHTML = cols.map(a=>`
+    <div class="op"><h4><a href="article.html?id=${a.id}">${a.title}</a></h4>
+    <div class="by">${a.author||"정엘가업승계연구소"} · ${fmt(a.published_at)}</div></div>`).join("");
+
+  // ⑦ 유튜브
+  const vids = all.filter(a=>a.youtube_id).slice(0,2);
+  document.getElementById("np-tv").innerHTML = vids.map(v=>`
+    <a href="article.html?id=${v.id}">
+      <div class="th" style="background-image:url('https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg')"></div>
+      <h5>${v.title}</h5>
+    </a>`).join("");
 })();
 </script>
 </body>
