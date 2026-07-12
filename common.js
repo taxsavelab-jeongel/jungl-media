@@ -130,7 +130,7 @@
     document.getElementById("site-header").innerHTML = `
       <div class="topbar"><div class="container">
         <span class="reg">${dateStr} · ${C.REG_NO || "인터넷신문 (등록 준비 중)"}</span>
-        <span class="util"><a href="contact.html">광고문의</a><a href="contact.html">기사제보</a><a href="reporter-apply.html">기자단·전문가</a><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener"><b>회원가입</b></a><a href="member-login.html">회원 로그인</a><a href="admin.html">관리자</a></span>
+        <span class="util"><a href="write.html" id="nav-write" style="display:none"><b>✍️ 글쓰기</b></a><a href="contact.html">광고문의</a><a href="contact.html">기사제보</a><a href="reporter-apply.html">기자단·전문가</a><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener"><b>회원가입</b></a><a href="member-login.html">회원 로그인</a><a href="admin.html">관리자</a></span>
       </div></div>
       <header class="masthead"><div class="container">
         <a href="index.html" class="brand"><span>
@@ -148,6 +148,24 @@
         <li><a href="resources.html" class="${active==="resources"?"active":""}">자료실</a></li>
         <li class="premier"><a href="premier.html" class="${active==="premier"?"active":""}">PREMIER</a></li>
       </ul></div></nav>`;
+    showWriteLink();
+  }
+
+  // 승인된 기자·전문가(또는 관리자)로 로그인한 경우에만 상단에 '글쓰기' 링크 표시
+  async function showWriteLink() {
+    try {
+      if (!sb) return;
+      const { data } = await sb.auth.getSession();
+      const u = data.session && data.session.user;
+      if (!u) return;
+      let ok = u.email === "taxsavelab@gmail.com";
+      if (!ok) {
+        const { data: p } = await sb.from("profiles").select("role, reporter_status").eq("id", u.id).maybeSingle();
+        ok = !!(p && p.role === "reporter" && p.reporter_status === "approved");
+      }
+      const el = document.getElementById("nav-write");
+      if (ok && el) el.style.display = "";
+    } catch (e) {}
   }
 
   function renderFooter() {
