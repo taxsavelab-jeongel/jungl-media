@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.auth-wrap{max-width:420px;margin:0 auto;padding:60px 20px 90px}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:36px 32px}
+.auth-card h1{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:var(--brown);margin:0 0 8px;text-align:center}
+.auth-sub{font-size:13px;color:var(--txt-gray);text-align:center;margin-bottom:26px}
+.auth-row{margin-bottom:14px}
+.auth-row label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.auth-row input,.auth-row select{width:100%;padding:12px 14px;border:1px solid var(--gray);border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box}
+.auth-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;margin-top:6px}
+.auth-btn:hover{background:var(--red-dark)}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:22px 0;font-size:12px;color:var(--txt-light)}
+.auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.oauth-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:6px;font-size:14px;font-weight:700;border:1px solid var(--gray);background:#fff;cursor:pointer;margin-bottom:10px}
+.oauth-btn.google{color:#3c4043}
+.oauth-btn.kakao{background:#FEE500;border-color:#FEE500;color:#181600}
+.auth-links{text-align:center;font-size:13px;color:var(--txt-gray);margin-top:20px}
+.auth-links a{color:var(--red);font-weight:700}
+.auth-msg{font-size:13px;text-align:center;min-height:20px;margin-top:6px}
+.auth-msg.ok{color:#1a7a3a;font-weight:700}
+.auth-msg.err{color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>회원가입</h1>
+    <p class="auth-sub">가업승계 대표님을 위한 회원 전용 자료를<br>무료로 받아보세요.</p>
+
+    <button class="oauth-btn google" id="btn-google">🔴 Google로 시작하기</button>
+    <button class="oauth-btn kakao" id="btn-kakao">💬 카카오로 시작하기</button>
+
+    <div class="auth-divider">또는 이메일로 가입</div>
+
+    <form id="signup-form">
+      <div class="auth-row"><label>이메일</label><input type="email" id="su-email" required></div>
+      <div class="auth-row"><label>비밀번호 (6자 이상)</label><input type="password" id="su-pw" minlength="6" required></div>
+      <div class="auth-row"><label>비밀번호 확인</label><input type="password" id="su-pw2" minlength="6" required></div>
+      <button type="submit" class="auth-btn">이메일로 가입하기</button>
+    </form>
+    <div class="auth-msg" id="msg"></div>
+
+    <div class="auth-links">
+      이미 회원이신가요? <a href="member-login.html">로그인</a>
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+  const redirect = new URLSearchParams(location.search).get("redirect") || "";
+  const nextUrl = "complete-profile.html" + (redirect ? "?redirect=" + encodeURIComponent(redirect) : "");
+
+  function setMsg(text, ok) {
+    const m = $("msg"); m.textContent = text; m.className = "auth-msg " + (ok ? "ok" : "err");
+  }
+
+  if (!sb) { setMsg("일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", false); }
+
+  $("btn-google").onclick = async () => {
+    if (!sb) return;
+    await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + "/" + nextUrl } });
+  };
+  $("btn-kakao").onclick = async () => {
+    if (!sb) return;
+    await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + "/" + nextUrl } });
+  };
+
+  $("signup-form").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb) return;
+    const email = $("su-email").value.trim();
+    const pw = $("su-pw").value;
+    const pw2 = $("su-pw2").value;
+    if (pw !== pw2) { setMsg("비밀번호가 일치하지 않습니다.", false); return; }
+    const { data, error } = await sb.auth.signUp({
+      email, password: pw,
+      options: { emailRedirectTo: location.origin + "/" + nextUrl }
+    });
+    if (error) { setMsg("가입 실패: " + error.message, false); return; }
+    if (data.session) {
+      location.href = nextUrl;
+    } else {
+      setMsg("가입 확인 이메일을 보냈습니다. 메일함을 확인해 인증을 완료해 주세요.", true);
+    }
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원 정보 입력 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.auth-wrap{max-width:460px;margin:0 auto;padding:60px 20px 90px}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:36px 32px}
+.auth-card h1{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:var(--brown);margin:0 0 8px;text-align:center}
+.auth-sub{font-size:13px;color:var(--txt-gray);text-align:center;margin-bottom:26px;line-height:1.7}
+.auth-row{margin-bottom:14px}
+.auth-row label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.auth-row input,.auth-row select{width:100%;padding:12px 14px;border:1px solid var(--gray);border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box}
+.auth-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;margin-top:6px}
+.auth-btn:hover{background:var(--red-dark)}
+.auth-msg{font-size:13px;text-align:center;min-height:20px;margin-top:6px}
+.auth-msg.ok{color:#1a7a3a;font-weight:700}
+.auth-msg.err{color:var(--red)}
+.priv-note{font-size:12px;color:var(--txt-light);margin-top:20px;line-height:1.7;text-align:left;background:var(--bluegray);border-radius:8px;padding:14px 16px}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="auth-wrap">
+  <div class="auth-card" id="card">
+    <h1>회원 정보 입력</h1>
+    <p class="auth-sub">회원 전용 자료실 이용을 위해<br>아래 정보를 한 번만 입력해 주세요.</p>
+
+    <form id="profile-form">
+      <div class="auth-row"><label>연락처 *</label><input type="tel" id="pf-phone" placeholder="010-0000-0000" required></div>
+      <div class="auth-row"><label>회사명</label><input type="text" id="pf-company" placeholder="회사명을 입력해 주세요"></div>
+      <div class="auth-row"><label>관심 분야</label>
+        <select id="pf-interest">
+          <option value="가업승계 일반">가업승계 일반</option>
+          <option value="증여세">증여세</option>
+          <option value="상속세">상속세</option>
+          <option value="가업상속공제">가업상속공제</option>
+          <option value="주식이전·M&A">주식이전·M&A</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <button type="submit" class="auth-btn">완료하고 자료실 이용하기</button>
+    </form>
+    <div class="auth-msg" id="msg"></div>
+
+    <div class="priv-note">
+      입력하신 정보는 정엘가업승계연구소의 맞춤 자료 제공 및 상담 안내 목적으로만 사용되며,
+      제3자에게 제공되지 않습니다.
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+  const redirect = new URLSearchParams(location.search).get("redirect");
+  const nextUrl = redirect || "resources.html";
+
+  function setMsg(text, ok) {
+    const m = $("msg"); m.textContent = text; m.className = "auth-msg " + (ok ? "ok" : "err");
+  }
+
+  let user = null;
+
+  async function init() {
+    if (!sb) { setMsg("일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", false); return; }
+    const { data } = await sb.auth.getSession();
+    if (!data.session) { location.href = "member-login.html?redirect=" + encodeURIComponent(nextUrl); return; }
+    user = data.session.user;
+
+    const { data: profile } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    if (profile && profile.profile_completed) { location.href = nextUrl; return; }
+    if (profile) {
+      $("pf-phone").value = profile.phone || "";
+      $("pf-company").value = profile.company || "";
+      if (profile.interest) $("pf-interest").value = profile.interest;
+    }
+  }
+  init();
+
+  $("profile-form").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb || !user) return;
+    const row = {
+      id: user.id,
+      email: user.email,
+      phone: $("pf-phone").value.trim(),
+      company: $("pf-company").value.trim(),
+      interest: $("pf-interest").value,
+      profile_completed: true
+    };
+    const { error } = await sb.from("profiles").upsert(row);
+    if (error) { setMsg("저장 실패: " + error.message, false); return; }
+    location.href = nextUrl;
+  };
+})();
+</script>
+</body>
+</html>

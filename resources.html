@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원 자료실 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.res-wrap{max-width:900px;margin:0 auto;padding:50px 20px 90px}
+.res-head{text-align:center;margin-bottom:36px}
+.res-head h1{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:var(--brown);margin:0 0 10px}
+.res-head p{font-size:14px;color:var(--txt-gray)}
+.res-list{display:grid;gap:16px}
+.res-item{display:flex;gap:16px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 22px}
+.res-thumb{width:64px;height:64px;border-radius:8px;background:var(--bluegray) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px}
+.res-info{flex:1}
+.res-info h3{font-size:16px;font-weight:700;color:var(--ink);margin:0 0 6px}
+.res-info p{font-size:13px;color:var(--txt-gray);line-height:1.6;margin:0}
+.res-dl{background:var(--red);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;padding:10px 18px;text-decoration:none;white-space:nowrap}
+.res-dl:hover{background:var(--red-dark)}
+.res-empty{text-align:center;color:var(--txt-light);font-size:14px;padding:60px 0}
+.res-loading{text-align:center;color:var(--txt-light);font-size:14px;padding:60px 0}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="res-wrap">
+  <div class="res-head">
+    <h1>📚 회원 전용 자료실</h1>
+    <p>정엘가업승계연구소가 대표님을 위해 준비한 자료입니다.</p>
+  </div>
+  <div class="res-list" id="res-list">
+    <div class="res-loading">불러오는 중…</div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("resources");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+  const here = "resources.html";
+
+  async function init() {
+    if (!sb) { $("res-list").innerHTML = '<div class="res-empty">일시적인 오류입니다. 잠시 후 다시 시도해 주세요.</div>'; return; }
+    const { data: sessionData } = await sb.auth.getSession();
+    if (!sessionData.session) { location.href = "member-login.html?redirect=" + encodeURIComponent(here); return; }
+
+    const { data: profile } = await sb.from("profiles").select("profile_completed").eq("id", sessionData.session.user.id).maybeSingle();
+    if (!profile || !profile.profile_completed) { location.href = "complete-profile.html?redirect=" + encodeURIComponent(here); return; }
+
+    const { data, error } = await sb.from("resources").select("*").eq("published", true).order("created_at", { ascending: false });
+    if (error || !data || !data.length) {
+      $("res-list").innerHTML = '<div class="res-empty">현재 등록된 자료가 없습니다. 곧 새로운 자료로 찾아뵙겠습니다.</div>';
+      return;
+    }
+    $("res-list").innerHTML = data.map(r => `
+      <div class="res-item">
+        <div class="res-thumb"${r.thumbnail_url ? ` style="background-image:url('${r.thumbnail_url}')"` : ""}>${r.thumbnail_url ? "" : "📄"}</div>
+        <div class="res-info">
+          <h3>${r.title}</h3>
+          <p>${r.description || ""}</p>
+        </div>
+        <a class="res-dl" href="${r.file_url}" target="_blank" rel="noopener">다운로드</a>
+      </div>`).join("");
+  }
+  init();
+})();
+</script>
+</body>
+</html>

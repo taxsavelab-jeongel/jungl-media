@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비밀번호 찾기 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.auth-wrap{max-width:420px;margin:0 auto;padding:60px 20px 90px}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:36px 32px}
+.auth-card h1{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:900;color:var(--brown);margin:0 0 8px;text-align:center}
+.auth-sub{font-size:13px;color:var(--txt-gray);text-align:center;margin-bottom:26px;line-height:1.7}
+.auth-row{margin-bottom:14px}
+.auth-row label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.auth-row input{width:100%;padding:12px 14px;border:1px solid var(--gray);border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box}
+.auth-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;margin-top:6px}
+.auth-btn:hover{background:var(--red-dark)}
+.auth-links{text-align:center;font-size:13px;color:var(--txt-gray);margin-top:20px}
+.auth-links a{color:var(--red);font-weight:700}
+.auth-msg{font-size:13px;text-align:center;min-height:20px;margin-top:6px}
+.auth-msg.ok{color:#1a7a3a;font-weight:700}
+.auth-msg.err{color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>비밀번호 찾기</h1>
+    <p class="auth-sub">가입하신 이메일 주소를 입력하시면<br>비밀번호 재설정 링크를 보내드립니다.</p>
+
+    <form id="forgot-form">
+      <div class="auth-row"><label>이메일</label><input type="email" id="fg-email" required></div>
+      <button type="submit" class="auth-btn">재설정 메일 보내기</button>
+    </form>
+    <div class="auth-msg" id="msg"></div>
+
+    <div class="auth-links">
+      <a href="member-login.html">로그인으로 돌아가기</a>
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+
+  function setMsg(text, ok) {
+    const m = $("msg"); m.textContent = text; m.className = "auth-msg " + (ok ? "ok" : "err");
+  }
+
+  if (!sb) { setMsg("일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", false); }
+
+  $("forgot-form").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!sb) return;
+    const email = $("fg-email").value.trim();
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + "/member-reset.html"
+    });
+    if (error) { setMsg("요청 실패: " + error.message, false); return; }
+    setMsg("재설정 메일을 보냈습니다. 메일함(스팸함 포함)을 확인해 주세요.", true);
+  };
+})();
+</script>
+</body>
+</html>
