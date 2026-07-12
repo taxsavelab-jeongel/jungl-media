@@ -90,13 +90,30 @@
         (data || []).forEach(m => { if (m.value) items.push(mktRow(m.label, m.value, m.delta)); });
       }
     } catch (e) {}
+    // 환율: 3중 폴백 (frankfurter → open.er-api → jsdelivr currency-api)
+    let rt = null;
     try {
       const r = await fetch("https://api.frankfurter.app/latest?from=KRW&to=USD,EUR,JPY");
-      const j = await r.json(); const rt = (j && j.rates) || {};
+      const j = await r.json(); if (j && j.rates && j.rates.USD) rt = j.rates;
+    } catch (e) {}
+    if (!rt) {
+      try {
+        const r = await fetch("https://open.er-api.com/v6/latest/KRW");
+        const j = await r.json(); if (j && j.rates && j.rates.USD) rt = j.rates;
+      } catch (e) {}
+    }
+    if (!rt) {
+      try {
+        const r = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/krw.json");
+        const j = await r.json(); const k = j && j.krw;
+        if (k && k.usd) rt = { USD: k.usd, JPY: k.jpy, EUR: k.eur };
+      } catch (e) {}
+    }
+    if (rt) {
       if (rt.USD) items.push(mktRow("원/달러", Math.round(1 / rt.USD).toLocaleString(), ""));
       if (rt.JPY) items.push(mktRow("원/엔(100)", Math.round(100 / rt.JPY).toLocaleString(), ""));
       if (rt.EUR) items.push(mktRow("원/유로", Math.round(1 / rt.EUR).toLocaleString(), ""));
-    } catch (e) {}
+    }
     el.innerHTML = (items.length ? items.join("") : '<div class="mkt-loading">지표 준비 중입니다.</div>')
       + '<div class="mkt-src">환율 실시간 · 지수는 편집국 기준</div>';
   }
