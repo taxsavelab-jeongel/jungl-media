@@ -69,10 +69,9 @@
         <a href="index.html" class="brand"><span>
           <span class="logo"><span class="wordmark">정엘</span>
             <span class="l-block">${lSvg}<span class="sub">미디어<br>MEDIA</span></span></span>
-          <div class="brand-slogan">가업승계 그 이상, <b>100년 기업</b>의 이야기를 잇는 경제신문</div>
+          <div class="brand-slogan"><b>중소기업 오너</b>를 위한 가업승계·절세 전문 신문</div>
         </span></a>
         <div class="head-cta">
-          <a href="${C.CONSULT_URL||C.INSTITUTE_URL||"#"}" target="_blank" rel="noopener" class="btn btn-outline">상담 신청</a>
           <a href="subscribe.html" class="btn btn-red">구독하기</a>
         </div>
       </div></header>

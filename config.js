@@ -7,7 +7,7 @@ window.JUNGL_CONFIG = {
 
   // 사이트 기본 정보
   SITE_NAME: "정엘미디어",
-  SLOGAN: "가업승계 그 이상, 100년 기업의 이야기를 잇는 경제신문",
+  SLOGAN: "중소기업 오너를 위한 가업승계·절세 전문 신문",
   REG_NO: "등록번호 (등록 후 기재)",
   PUBLISHER: "정선의",
   EDITOR: "우예슬",
@@ -18,7 +18,7 @@ window.JUNGL_CONFIG = {
   SMS_PHONE: "010-5000-9632",
   CONSULT_URL: "https://www.jeongel.co.kr/contact#w202508060bc4acd979b35",    // 상담 신청 — 폼에 바로 도착
   MEMBER_URL: "https://docs.google.com/forms/d/e/1FAIpQLSfSp_EPFpXqQ87atqJ1qTUQ8ZUmyQNa4SKC9RVRBsWY1SvbzQ/viewform", // 회원가입 폼
-  KAKAO_CHANNEL_URL: "#",
+  KAKAO_CHANNEL_URL: "https://pf.kakao.com/_KIcfK",          // 카카오톡 채널 (상담 바로가기: https://pf.kakao.com/_KIcfK/chat)
   YOUTUBE_URL: "https://www.youtube.com/channel/UCOsUUoxhs69bPAi1N03D9Og",
   INSTITUTE_URL: "https://www.jeongel.co.kr",
   PREMIER_URL: "https://www.jeongel.co.kr/35"
