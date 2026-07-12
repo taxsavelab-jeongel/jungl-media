@@ -68,8 +68,8 @@
     const approved = prof && prof.role === "reporter" && prof.reporter_status === "approved";
     if (!approved && !isAdmin) {
       const pending = prof && prof.reporter_status === "pending";
-      if (pending) gate("📝", "승인 대기 중", "기자 신청이 검토 중입니다. 승인되면 이 화면에서 글을 쓰실 수 있어요.");
-      else gate("✋", "기자 승인이 필요해요", '먼저 기자단 신청을 해주세요.<br><br><a class="wr-btn" href="reporter-apply.html" style="text-decoration:none">기자단 신청하러 가기</a>');
+      if (pending) gate("📝", "승인 대기 중", "기자단·전문가 신청이 검토 중입니다. 승인되면 이 화면에서 글을 쓰실 수 있어요.");
+      else gate("✋", "기자·전문가 승인이 필요해요", '먼저 기자단·전문가 신청을 해주세요.<br><br><a class="wr-btn" href="reporter-apply.html" style="text-decoration:none">기자단·전문가 신청하러 가기</a>');
       return;
     }
     renderConsole(prof, isAdmin);
@@ -79,8 +79,22 @@
     $("wrap").innerHTML = `<div class="wr-card"><div class="wr-gate"><div class="em">${em}</div><h2>${h}</h2><p>${p}</p></div></div>`;
   }
 
+  let byline = "정엘 편집국"; // 저장 시 기사 author 로 들어가는 서명
+
   function renderConsole(prof, isAdmin) {
-    const penName = (prof && prof.reporter_pen_name) || (isAdmin ? "정엘 편집국" : "정엘 기자");
+    // 서명 규칙: 전문가 → "이름 직함 (소속)" / 기자 → 필명 / 관리자 기본 → 정엘 편집국
+    if (prof && prof.reporter_type === "expert" && prof.reporter_pen_name) {
+      byline = prof.reporter_pen_name
+        + (prof.reporter_title ? " " + prof.reporter_title : "")
+        + (prof.reporter_org ? " (" + prof.reporter_org + ")" : "");
+    } else if (prof && prof.reporter_pen_name) {
+      byline = prof.reporter_pen_name;
+    } else if (isAdmin) {
+      byline = "정엘 편집국";
+    } else {
+      byline = "정엘 기자";
+    }
+    const penName = byline;
     const chOpts = J.CHANNELS.filter(c => c.slug !== "tv").map(c => `<option value="${c.slug}">${c.name}</option>`).join("");
     $("wrap").innerHTML = `
       <div class="wr-card">
@@ -100,7 +114,7 @@
 
       <div class="wr-card">
         <h2 id="ed-title">📝 기사 작성</h2>
-        <div class="hint">기자명: <b>${penName}</b> · 저장하면 편집국 승인 후 발행됩니다.</div>
+        <div class="hint">서명: <b>${penName}</b> · 저장하면 편집국 승인 후 발행됩니다.</div>
         <input type="hidden" id="a-id">
         <div class="wr-row"><label>제목 *</label><input type="text" id="a-title" placeholder="기사 제목"></div>
         <div class="wr-row"><label>요약(부제)</label><input type="text" id="a-lede" placeholder="1~2문장 요약"></div>
@@ -177,7 +191,7 @@
     if(status==="review" && !confirm("최종 제출하면 편집국 승인 대기 상태가 됩니다. 제출할까요?"))return;
     const row = {
       title, lede:$("a-lede").value.trim(), content:toHtml(content),
-      channel_slug:$("a-channel").value, author:( "정엘 기자"),
+      channel_slug:$("a-channel").value, author: byline,
       thumbnail_url:$("a-thumb").value.trim(),
       is_featured:false, published:false, status,
       author_id:user.id
