@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#171106"/><stop offset=".6" stop-color="#3d2d0e"/><stop offset="1" stop-color="#64491a"/></linearGradient>
+<radialGradient id="gl" cx="20%" cy="110%" r="70%"><stop offset="0" stop-color="#ffffff" stop-opacity=".07"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="750" fill="url(#bg)"/><rect width="1200" height="750" fill="url(#gl)"/>
+
+   <g fill="none" stroke="#ffd88f" stroke-width="5" opacity=".92" transform="translate(155,215) scale(1.65)">
+   <ellipse cx="100" cy="150" rx="52" ry="14"/><ellipse cx="100" cy="132" rx="52" ry="14"/><ellipse cx="100" cy="114" rx="52" ry="14"/>
+   <path d="M60 60 L100 25 L140 60"/><line x1="100" y1="25" x2="100" y2="88"/></g>
+<text x="640" y="330" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="24" letter-spacing="8" fill="#ffd88f" font-weight="600">JUNGL MEDIA</text>
+<text x="640" y="410" font-family="'Noto Serif KR','Nanum Myeongjo',serif" font-size="64" fill="#ffffff" font-weight="900" letter-spacing="-1">절세전략</text>
+<g transform="translate(640,455)">
+  <text x="0" y="24" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="27" fill="rgba(255,255,255,.92)" font-weight="900">정엘</text>
+  <polygon points="66,0 73,7 73,26 92,26 92,32 66,32" fill="#C0111F"/>
+  <text x="102" y="24" font-family="sans-serif" font-size="14" letter-spacing="2" fill="rgba(255,255,255,.5)">MEDIA</text>
+</g>
+</svg>
