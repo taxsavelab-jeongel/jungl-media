@@ -168,12 +168,12 @@ create policy "resources_admin_write" on resources
 -- ============================================
 -- 7) 기자단 시스템 (역할 + 기사 승인 워크플로우) — 2026-07 추가
 -- ============================================
--- profiles 추가 컴럼: role('member'|'reporter'|'editor'), reporter_status('pending'|'approved'|'rejected'),
+-- profiles 추가 컬럼: role('member'|'reporter'|'editor'), reporter_status('pending'|'approved'|'rejected'),
 --   reporter_pen_name, reporter_bio, reporter_applied_at, reporter_reject_reason
--- profiles 추가 컴럼(2026-07-12, 전문가 필진): reporter_type('reporter'|'expert'),
+-- profiles 추가 컬럼(2026-07-12, 전문가 필진): reporter_type('reporter'|'expert'),
 --   reporter_title(직함: 세무사·회계사 등), reporter_org(소속: 정엘가업승계연구소 등)
 --   전문가 기사 서명: "이름 직함 (소속)" 형태로 articles.author 에 저장 (write.html)
--- articles 추가 컴럼: status('writing'|'review'|'published'|'rejected'), author_id(uuid→auth.users),
+-- articles 추가 컬럼: status('writing'|'review'|'published'|'rejected'), author_id(uuid→auth.users),
 --   reject_reason, submitted_at
 
 -- 승인된 기자 판별

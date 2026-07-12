@@ -53,7 +53,7 @@
   function thumbClass(a) { return ""; }
   function iconOf(a) { return ""; }
 
-  // ── 경제지표 박스 (홈 우측 컴럼용) ──
+  // ── 경제지표 박스 (홈 우측 컬럼용) ──
   function injectMktStyle() {
     if (document.getElementById("mkt-style")) return;
     const s = document.createElement("style"); s.id = "mkt-style";
