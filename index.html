@@ -16,6 +16,15 @@
 <style>
 /* ── 신문형 메인 전용 스타일 ── */
 .np-wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+/* 전체 폭 톱기사 배너 */
+.np-banner{display:grid;grid-template-columns:1fr 1.45fr;gap:34px;align-items:center;padding:26px 0 24px;border-bottom:3px double var(--brown)}
+.np-banner .cat{font-size:12.5px;font-weight:700;color:var(--red);letter-spacing:.5px}
+.np-banner h1{font-family:'Noto Serif KR',serif;font-size:38px;font-weight:900;line-height:1.3;letter-spacing:-1px;color:#1a1108;margin:8px 0 14px}
+.np-banner a:hover h1{color:var(--red)}
+.np-banner .lede{font-size:15px;color:var(--txt-gray);line-height:1.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.np-banner .by{font-size:12.5px;color:var(--txt-light)}
+.np-banner .thumb-bn{height:330px;border-radius:4px;position:relative;overflow:hidden;background-size:cover;background-position:center}
+.np-banner .thumb-bn .icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:64px;opacity:.4}
 .np-top{display:grid;grid-template-columns:1.6fr 1.1fr 0.9fr;gap:0;border-bottom:2px solid var(--brown);padding:26px 0 22px}
 .np-col{padding:0 22px}
 .np-col:first-child{padding-left:0}
@@ -93,6 +102,9 @@
 .np-ad p{font-size:12px;color:var(--txt-gray);line-height:1.5;margin-bottom:8px}
 .np-ad .go{font-size:12px;font-weight:700;color:var(--red)}
 @media(max-width:960px){
+  .np-banner{grid-template-columns:1fr;gap:14px;padding:18px 0}
+  .np-banner h1{font-size:26px}
+  .np-banner .thumb-bn{height:180px}
   .np-top{grid-template-columns:1fr}
   .np-col{padding:14px 0!important;border-left:none!important;border-top:1px solid var(--line)}
   .np-col:first-child{border-top:none}
@@ -111,6 +123,9 @@
 
 <div class="np-wrap">
 
+  <!-- 전체 폭 톱기사 배너 -->
+  <div class="np-banner" id="np-banner" style="display:none"></div>
+
   <!-- 톱 3단: 헤드라인 / 주요뉴스 / 많이본·최신 -->
   <div class="np-top">
     <div class="np-col np-lead" id="np-lead"></div>
@@ -119,6 +134,10 @@
       <ul class="np-list" id="np-major"></ul>
     </div>
     <div class="np-col">
+      <div class="np-side-box">
+        <div class="np-h">📈 오늘의 지표</div>
+        <div id="np-market"></div>
+      </div>
       <div class="np-side-box">
         <div class="np-h">많이 본 뉴스</div>
         <ol class="np-rank" id="np-rank"></ol>
@@ -179,15 +198,36 @@
   document.getElementById("np-yt-link").href = C.YOUTUBE_URL || "#";
   document.getElementById("ad-consult").href = C.CONSULT_URL || C.INSTITUTE_URL || "#";
 
+  J.renderMarketBox("np-market");
+
   const all = await J.fetchArticles({ limit: 80 });
   const feats = all.filter(a => a.is_featured);
   const byCh = s => all.filter(a => a.channel_slug === s);
   const fmt = J.fmtDate;
 
-  // ① 헤드라인 톱 + 서브 2건
-  const lead = feats[0] || all[0];
+  // ⓪ 전체 폭 톱기사 배너 (메인 노출 기사 중 최신 1건)
+  const banner = feats[0] || all[0];
+  if (banner) {
+    const bn = document.getElementById("np-banner");
+    bn.style.display = "";
+    bn.innerHTML = `
+      <a href="article.html?id=${banner.id}">
+        <span class="cat">${J.chName(banner.channel_slug)}</span>
+        <h1>${banner.title}</h1>
+        <p class="lede">${banner.lede||""}</p>
+        <div class="by">${banner.author||""} · ${fmt(banner.published_at)}</div>
+      </a>
+      <a href="article.html?id=${banner.id}"><div class="thumb-bn ${J.thumbClass(banner)}" ${J.thumbStyle(banner)}>${J.iconOf(banner)}</div></a>`;
+  }
+
+  // ① 헤드라인 톱 + 서브 2건 (배너 다음 순번)
+  const featsLeft = feats.filter(a=>!banner || a.id!==banner.id);
+  const pool = all.filter(a=>!banner || a.id!==banner.id);
+  const lead = featsLeft[0] || pool[0];
   if (lead) {
-    const subs = (feats.slice(1,3).length ? feats.slice(1,3) : all.slice(1,3));
+    const subPool = pool.filter(a=>a.id!==lead.id);
+    const subFeats = featsLeft.filter(a=>a.id!==lead.id).slice(0,2);
+    const subs = (subFeats.length ? subFeats : subPool.slice(0,2));
     document.getElementById("np-lead").innerHTML = `
       <a href="article.html?id=${lead.id}">
         <span class="cat">${J.chName(lead.channel_slug)}</span>
@@ -200,7 +240,12 @@
   }
 
   // ② 주요뉴스
-  const used = new Set([lead && lead.id, ...(feats.slice(1,3).map(a=>a.id))].filter(Boolean));
+  const used = new Set([banner && banner.id, lead && lead.id].filter(Boolean));
+  if (lead) {
+    const subPool2 = pool.filter(a=>a.id!==lead.id);
+    const subFeats2 = featsLeft.filter(a=>a.id!==lead.id).slice(0,2);
+    (subFeats2.length ? subFeats2 : subPool2.slice(0,2)).forEach(a=>used.add(a.id));
+  }
   const major = all.filter(a=>!used.has(a.id)).slice(0,7);
   document.getElementById("np-major").innerHTML = major.map(a=>`
     <li><h4><a href="article.html?id=${a.id}">${a.title}</a></h4>
