@@ -39,35 +39,34 @@
     return data;
   }
   function fmtDate(d) { if (!d) return ""; return String(d).slice(0, 10).replaceAll("-", "."); }
+  // 대표 이미지가 없으면 채널별 브랜드 카드(img/ch-*.png, 자체 제작·저작권 문제 없음)를 사용
+  const CH_CARD = { architect:1, taxbrief:1, taxsaving:1, caselaw:1, century:1, column:1, tv:1 };
+  function chCard(a) {
+    const s = a.channel_slug;
+    return CH_CARD[s] ? `img/ch-${s}.svg` : "img/ch-column.svg";
+  }
   function thumbStyle(a) {
     if (a.thumbnail_url) return `style="background-image:url('${a.thumbnail_url}')"`;
     if (a.youtube_id) return `style="background-image:url('https://img.youtube.com/vi/${a.youtube_id}/hqdefault.jpg')"`;
-    return "";
+    return `style="background-image:url('${chCard(a)}')"`;
   }
-  function thumbClass(a) {
-    if (a.thumbnail_url || a.youtube_id) return "";
-    return ["g1","g2","g3","g4","g5","g6"][Math.abs(hash(a.id || a.title)) % 6];
-  }
-  function hash(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) | 0; return h; }
-  function iconOf(a) { return (a.thumbnail_url || a.youtube_id) ? "" : `<span class="icon">${(CHANNELS.find(c=>c.slug===a.channel_slug)||{}).emoji || "📰"}</span>`; }
+  function thumbClass(a) { return ""; }
+  function iconOf(a) { return ""; }
 
-  // ── 경제지표 띠 (홈 전용) ──
+  // ── 경제지표 박스 (홈 우측 컴럼용) ──
   function injectMktStyle() {
     if (document.getElementById("mkt-style")) return;
     const s = document.createElement("style"); s.id = "mkt-style";
     s.textContent = `
-      .mkt-strip{background:#241009;border-bottom:1px solid rgba(255,255,255,.08)}
-      .mkt-inner{display:flex;align-items:center;gap:14px;height:36px}
-      .mkt-tag{font-weight:800;color:#e7c9a0;white-space:nowrap;font-size:11px;letter-spacing:.5px;flex-shrink:0}
-      .mkt-track{display:flex;gap:22px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-ms-overflow-style:none}
-      .mkt-track::-webkit-scrollbar{display:none}
-      .mkt-item{white-space:nowrap;color:#d8cfc7;font-size:12px}
-      .mkt-item b{color:#fff;font-weight:700;margin-right:6px}
-      .mkt-item em{font-style:normal;font-weight:700;margin-left:5px}
-      .mkt-item em.up{color:#ff6b6b}
-      .mkt-item em.dn{color:#6bb6ff}
-      .mkt-loading{color:#9a8f88;font-size:12px}
-      .mkt-src{color:#8a7d75;font-size:10px;flex-shrink:0;white-space:nowrap}`;
+      .mkt-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px dashed #eee9e4;font-size:13.5px}
+      .mkt-row:last-of-type{border-bottom:none}
+      .mkt-row .lb{color:#3d3833;font-weight:700;letter-spacing:-.2px}
+      .mkt-row .vl{font-weight:700;color:#1a1108;font-variant-numeric:tabular-nums}
+      .mkt-row .vl em{font-style:normal;font-weight:700;font-size:12px;margin-left:6px}
+      .mkt-row .vl em.up{color:#c0111f}
+      .mkt-row .vl em.dn{color:#1b6ac9}
+      .mkt-loading{color:#9a8f88;font-size:12.5px;padding:8px 0}
+      .mkt-src{color:#b3a89e;font-size:10.5px;margin-top:6px;text-align:right}`;
     document.head.appendChild(s);
   }
   function mktDelta(d) {
@@ -76,27 +75,30 @@
     const cls = (t[0] === "-" || t.indexOf("▼") >= 0) ? "dn" : ((t[0] === "+" || t[0] === "▲") ? "up" : "");
     return cls ? `<em class="${cls}">${t}</em>` : `<em>${t}</em>`;
   }
-  function mktItem(label, value, delta) {
-    return `<span class="mkt-item"><b>${label}</b>${value}${mktDelta(delta)}</span>`;
+  function mktRow(label, value, delta) {
+    return `<div class="mkt-row"><span class="lb">${label}</span><span class="vl">${value}${mktDelta(delta)}</span></div>`;
   }
-  async function loadMarketStrip() {
-    const track = document.getElementById("mkt-track");
-    if (!track) return;
+  async function renderMarketBox(elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    injectMktStyle();
+    el.innerHTML = '<div class="mkt-loading">지표 불러오는 중…</div>';
     const items = [];
     try {
       if (sb) {
         const { data } = await sb.from("market_indicators").select("*").order("sort", { ascending: true });
-        (data || []).forEach(m => { if (m.value) items.push(mktItem(m.label, m.value, m.delta)); });
+        (data || []).forEach(m => { if (m.value) items.push(mktRow(m.label, m.value, m.delta)); });
       }
     } catch (e) {}
     try {
       const r = await fetch("https://api.frankfurter.app/latest?from=KRW&to=USD,EUR,JPY");
       const j = await r.json(); const rt = (j && j.rates) || {};
-      if (rt.USD) items.push(mktItem("원/달러", Math.round(1 / rt.USD).toLocaleString(), ""));
-      if (rt.JPY) items.push(mktItem("원/엔(100)", Math.round(100 / rt.JPY).toLocaleString(), ""));
-      if (rt.EUR) items.push(mktItem("원/유로", Math.round(1 / rt.EUR).toLocaleString(), ""));
+      if (rt.USD) items.push(mktRow("원/달러", Math.round(1 / rt.USD).toLocaleString(), ""));
+      if (rt.JPY) items.push(mktRow("원/엔(100)", Math.round(100 / rt.JPY).toLocaleString(), ""));
+      if (rt.EUR) items.push(mktRow("원/유로", Math.round(1 / rt.EUR).toLocaleString(), ""));
     } catch (e) {}
-    track.innerHTML = items.length ? items.join("") : '<span class="mkt-loading">지표 준비 중입니다.</span>';
+    el.innerHTML = (items.length ? items.join("") : '<div class="mkt-loading">지표 준비 중입니다.</div>')
+      + '<div class="mkt-src">환율 실시간 · 지수는 편집국 기준</div>';
   }
 
   function renderHeader(active) {
@@ -104,18 +106,14 @@
     const days = ["일","월","화","수","목","금","토"];
     const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 ${days[today.getDay()]}요일`;
     const lSvg = `<svg class="l-mark" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 7,7 7,33 30,33 30,40 0,40" fill="#C0111F"/></svg>`;
-    const mktStrip = (active === "home")
-      ? `<div class="mkt-strip"><div class="container mkt-inner"><span class="mkt-tag">📈 오늘의 지표</span><div class="mkt-track" id="mkt-track"><span class="mkt-loading">지표 불러오는 중…</span></div><span class="mkt-src">환율 실시간 · 지수 편집국 기준</span></div></div>`
-      : "";
     const nav = CHANNELS.map(c =>
       c.slug === "tv"
         ? `<li><a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">${c.name}</a></li>`
         : `<li><a href="channel.html?ch=${c.slug}" class="${active===c.slug?"active":""}">${c.name}</a></li>`).join("");
     document.getElementById("site-header").innerHTML = `
-      ${mktStrip}
       <div class="topbar"><div class="container">
         <span class="reg">${dateStr} · ${C.REG_NO || "인터넷신문 (등록 준비 중)"}</span>
-        <span class="util"><a href="contact.html">광고문의</a><a href="contact.html">기사제보</a><a href="reporter-apply.html">기자단</a><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener"><b>회원가입</b></a><a href="member-login.html">회원 로그인</a><a href="admin.html">관리자</a></span>
+        <span class="util"><a href="contact.html">광고문의</a><a href="contact.html">기사제보</a><a href="reporter-apply.html">기자단·전문가</a><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener"><b>회원가입</b></a><a href="member-login.html">회원 로그인</a><a href="admin.html">관리자</a></span>
       </div></div>
       <header class="masthead"><div class="container">
         <a href="index.html" class="brand"><span>
@@ -133,7 +131,6 @@
         <li><a href="resources.html" class="${active==="resources"?"active":""}">자료실</a></li>
         <li class="premier"><a href="premier.html" class="${active==="premier"?"active":""}">PREMIER</a></li>
       </ul></div></nav>`;
-    if (active === "home") { injectMktStyle(); loadMarketStrip(); }
   }
 
   function renderFooter() {
@@ -176,5 +173,5 @@
       </div>`;
   }
 
-  window.JUNGL = { sb, DEMO, CHANNELS, chName, fetchArticles, fetchArticle, fmtDate, thumbStyle, thumbClass, iconOf, renderHeader, renderFooter };
+  window.JUNGL = { sb, DEMO, CHANNELS, chName, fetchArticles, fetchArticle, fmtDate, thumbStyle, thumbClass, iconOf, renderHeader, renderFooter, renderMarketBox };
 })();
