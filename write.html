@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기자 글쓰기 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.wr-wrap{max-width:860px;margin:0 auto;padding:36px 20px 90px}
+.wr-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 26px;margin-bottom:22px}
+.wr-card h2{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900;color:var(--brown);margin:0 0 4px}
+.wr-card .hint{font-size:12px;color:var(--txt-light);margin:2px 0 14px;line-height:1.7}
+.wr-row{margin-bottom:14px}
+.wr-row label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.wr-row input,.wr-row textarea,.wr-row select{width:100%;padding:11px 13px;border:1px solid var(--gray);border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box}
+.wr-row textarea{min-height:120px;resize:vertical;line-height:1.7}
+.wr-row textarea#a-content{min-height:340px}
+.wr-inline{display:flex;gap:14px}.wr-inline .wr-row{flex:1}
+.wr-btn{background:var(--red);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;padding:11px 20px;cursor:pointer}
+.wr-btn:hover{background:var(--red-dark)}
+.wr-btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--gray)}
+.wr-btn.gen{background:var(--brown)}
+.wr-btn:disabled{opacity:.5;cursor:default}
+.wr-msg{font-size:13px;min-height:18px;margin-top:8px}
+.wr-msg.ok{color:#1a7a3a;font-weight:700}.wr-msg.err{color:var(--red)}
+.wr-gate{text-align:center;padding:50px 10px}
+.wr-gate .em{font-size:44px}.wr-gate h2{font-family:'Noto Serif KR',serif;color:var(--brown);margin:14px 0 8px}.wr-gate p{color:var(--txt-gray);line-height:1.8}
+.wr-list{width:100%;border-collapse:collapse;font-size:13px}
+.wr-list th,.wr-list td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+.wr-list th{color:var(--txt-light);font-weight:700;font-size:12px}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.b-writing{background:#eee;color:#555}.b-review{background:#fff3d6;color:#a6791b}.b-published{background:#e2f2e6;color:#1a7a3a}.b-rejected{background:#fde4e4;color:#c0111f}
+.wr-list button{font-size:12px;padding:5px 10px;margin-right:4px;border:1px solid var(--gray);background:#fff;border-radius:5px;cursor:pointer}
+.gen-box{background:var(--bluegray);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+#gen-spin{display:none;font-size:13px;color:var(--brown);font-weight:700;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="wr-wrap" id="wrap">
+  <div class="wr-card"><div class="wr-gate"><div class="em">⏳</div><p>불러오는 중…</p></div></div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+  let user = null;
+
+  async function init() {
+    if (!sb) { gate("⚠️", "오류", "일시적인 오류입니다. 잠시 후 다시 시도해 주세요."); return; }
+    const { data } = await sb.auth.getSession();
+    if (!data.session) { location.href = "member-login.html?redirect=" + encodeURIComponent("write.html"); return; }
+    user = data.session.user;
+    const isAdmin = user.email === "taxsavelab@gmail.com";
+    const { data: prof } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    const approved = prof && prof.role === "reporter" && prof.reporter_status === "approved";
+    if (!approved && !isAdmin) {
+      const pending = prof && prof.reporter_status === "pending";
+      if (pending) gate("📝", "승인 대기 중", "기자 신청이 검토 중입니다. 승인되면 이 화면에서 글을 쓰실 수 있어요.");
+      else gate("✋", "기자 승인이 필요해요", '먼저 기자단 신청을 해주세요.<br><br><a class="wr-btn" href="reporter-apply.html" style="text-decoration:none">기자단 신청하러 가기</a>');
+      return;
+    }
+    renderConsole(prof, isAdmin);
+  }
+
+  function gate(em, h, p) {
+    $("wrap").innerHTML = `<div class="wr-card"><div class="wr-gate"><div class="em">${em}</div><h2>${h}</h2><p>${p}</p></div></div>`;
+  }
+
+  function renderConsole(prof, isAdmin) {
+    const penName = (prof && prof.reporter_pen_name) || (isAdmin ? "정엘 편집국" : "정엘 기자");
+    const chOpts = J.CHANNELS.filter(c => c.slug !== "tv").map(c => `<option value="${c.slug}">${c.name}</option>`).join("");
+    $("wrap").innerHTML = `
+      <div class="wr-card">
+        <h2>🤖 AI 기사 도우미</h2>
+        <div class="hint">주제만 입력하면 정엘미디어 기사작성표준(전문성+감성 12원칙)에 맞춰 초안을 만들어 드려요. 초안은 아래에서 자유롭게 수정하실 수 있습니다.</div>
+        <div class="gen-box">
+          <div class="wr-inline">
+            <div class="wr-row" style="flex:2"><label>기사 주제 *</label><input type="text" id="g-topic" placeholder="예: 자녀에게 회사 주식을 미리 증여할 때 주의할 점"></div>
+            <div class="wr-row"><label>채널</label><select id="g-channel">${chOpts}</select></div>
+          </div>
+          <div class="wr-row"><label>추가 지시(선택)</label><input type="text" id="g-extra" placeholder="예: 30~40대 창업 2세 대표 독자 대상, 표 1개 포함"></div>
+          <button class="wr-btn gen" id="btn-gen">✨ AI 초안 생성</button>
+          <div id="gen-spin">✍️ 기사를 쓰는 중입니다… (20~40초 걸릴 수 있어요)</div>
+          <div class="wr-msg" id="gen-msg"></div>
+        </div>
+      </div>
+
+      <div class="wr-card">
+        <h2 id="ed-title">📝 기사 작성</h2>
+        <div class="hint">기자명: <b>${penName}</b> · 저장하면 편집국 승인 후 발행됩니다.</div>
+        <input type="hidden" id="a-id">
+        <div class="wr-row"><label>제목 *</label><input type="text" id="a-title" placeholder="기사 제목"></div>
+        <div class="wr-row"><label>요약(부제)</label><input type="text" id="a-lede" placeholder="1~2문장 요약"></div>
+        <div class="wr-inline">
+          <div class="wr-row"><label>채널 *</label><select id="a-channel">${chOpts}</select></div>
+          <div class="wr-row"><label>대표 이미지</label><input type="file" id="a-thumb-file" accept="image/*"><div class="hint" id="thumb-status"></div><input type="text" id="a-thumb" placeholder="이미지 URL" style="margin-top:6px"></div>
+        </div>
+        <div class="wr-row"><label>본문 *</label><textarea id="a-content" placeholder="본문. 빈 줄로 문단을 나누면 자동 정리됩니다. HTML 태그도 사용 가능."></textarea></div>
+        <button class="wr-btn ghost" id="btn-save">임시저장</button>
+        <button class="wr-btn" id="btn-submit">최종 제출 (승인 요청)</button>
+        <button class="wr-btn ghost" id="btn-new" style="float:right">새 기사</button>
+        <div class="wr-msg" id="save-msg"></div>
+      </div>
+
+      <div class="wr-card">
+        <h2>📄 내 기사</h2>
+        <table class="wr-list"><thead><tr><th>상태</th><th>채널</th><th>제목</th><th>날짜</th><th>관리</th></tr></thead><tbody id="my-list"></tbody></table>
+      </div>
+    `;
+    $("a-channel").value = J.CHANNELS[0].slug;
+    wireEvents();
+    loadMine();
+  }
+
+  function toHtml(t){t=t.trim();if(/<p[\s>]|<h[1-6]|<div|<blockquote|<ul|<table/i.test(t))return t;return t.split(/\n\s*\n/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("\n");}
+  function fromHtml(h){if(!h)return"";return h.replace(/<\/p>\s*<p>/g,"\n\n").replace(/<br\s*\/?>/g,"\n").replace(/<\/?p>/g,"").trim()||h;}
+  function msg(id,t,ok){const m=$(id);m.textContent=t;m.className="wr-msg "+(ok?"ok":"err");if(ok)setTimeout(()=>{m.textContent="";},5000);}
+
+  function wireEvents() {
+    $("btn-gen").onclick = async () => {
+      const topic = $("g-topic").value.trim();
+      if (!topic) { msg("gen-msg","주제를 입력해 주세요.",false); return; }
+      $("btn-gen").disabled = true; $("gen-spin").style.display="block"; msg("gen-msg","",true);
+      try {
+        const { data, error } = await sb.functions.invoke("generate-article", {
+          body: { topic, channel: $("g-channel").value, extra: $("g-extra").value.trim() }
+        });
+        if (error) { let d=""; try{d=(await error.context.json()).error;}catch(_){} msg("gen-msg", "생성 실패: " + (d||error.message), false); return; }
+        if (data.error) { msg("gen-msg", data.error, false); return; }
+        $("a-title").value = data.title || "";
+        $("a-lede").value = data.lede || "";
+        $("a-content").value = fromHtml(data.content || "");
+        $("a-channel").value = $("g-channel").value;
+        msg("gen-msg","초안이 완성됐어요! 아래에서 확인·수정 후 저장하세요.",true);
+        $("a-title").scrollIntoView({behavior:"smooth"});
+      } catch(e){ msg("gen-msg","오류: "+(e.message||e), false); }
+      finally { $("btn-gen").disabled=false; $("gen-spin").style.display="none"; }
+    };
+
+    $("a-thumb-file").onchange = async (e) => {
+      const f=e.target.files[0]; if(!f)return;
+      $("thumb-status").textContent="업로드 중…";
+      const path=Date.now()+"-"+f.name.replace(/[^a-zA-Z0-9.\-_]/g,"");
+      const {error}=await sb.storage.from("article-images").upload(path,f);
+      if(error){$("thumb-status").textContent="실패: "+error.message;return;}
+      $("a-thumb").value=sb.storage.from("article-images").getPublicUrl(path).data.publicUrl;
+      $("thumb-status").textContent="✅ 완료";
+    };
+
+    $("btn-save").onclick = () => save("writing");
+    $("btn-submit").onclick = () => save("review");
+    $("btn-new").onclick = resetForm;
+  }
+
+  function resetForm() {
+    ["a-id","a-title","a-lede","a-content","a-thumb"].forEach(i=>$(i).value="");
+    $("a-channel").value=J.CHANNELS[0].slug; $("ed-title").textContent="📝 기사 작성"; $("thumb-status").textContent="";
+  }
+
+  async function save(status) {
+    const title=$("a-title").value.trim(), content=$("a-content").value.trim();
+    if(!title){msg("save-msg","제목을 입력해 주세요.",false);return;}
+    if(!content){msg("save-msg","본문을 입력해 주세요.",false);return;}
+    if(status==="review" && !confirm("최종 제출하면 편집국 승인 대기 상태가 됩니다. 제출할까요?"))return;
+    const row = {
+      title, lede:$("a-lede").value.trim(), content:toHtml(content),
+      channel_slug:$("a-channel").value, author:( "정엘 기자"),
+      thumbnail_url:$("a-thumb").value.trim(),
+      is_featured:false, published:false, status,
+      author_id:user.id
+    };
+    if(status==="review") row.submitted_at=new Date().toISOString();
+    const id=$("a-id").value; let error;
+    if(id)({error}=await sb.from("articles").update(row).eq("id",id));
+    else ({error}=await sb.from("articles").insert(row));
+    if(error){msg("save-msg","저장 실패: "+error.message,false);return;}
+    msg("save-msg", status==="review"?"최종 제출되었습니다. 편집국 승인을 기다려 주세요.":"임시저장되었습니다.", true);
+    if(!id) resetForm();
+    loadMine();
+  }
+
+  async function loadMine() {
+    const { data } = await sb.from("articles").select("*").eq("author_id",user.id).order("created_at",{ascending:false}).limit(100);
+    const B={writing:["임시저장","b-writing"],review:["승인대기","b-review"],published:["발행","b-published"],rejected:["반려","b-rejected"]};
+    $("my-list").innerHTML=(data||[]).map(a=>{
+      const b=B[a.status]||B.writing;
+      const editable=a.status!=="published";
+      return `<tr>
+        <td><span class="badge ${b[1]}">${b[0]}</span>${a.status==="rejected"&&a.reject_reason?'<div style="color:var(--red);font-size:11px;margin-top:3px">'+a.reject_reason+'</div>':''}</td>
+        <td>${J.chName(a.channel_slug)}</td>
+        <td>${a.title}</td>
+        <td>${J.fmtDate(a.created_at)}</td>
+        <td>${editable?`<button onclick="rEdit('${a.id}')">수정</button><button onclick="rDel('${a.id}')">삭제</button>`:'<span style="color:var(--txt-light)">발행됨</span>'}</td>
+      </tr>`;}).join("") || '<tr><td colspan="5" style="color:var(--txt-light);padding:18px">아직 작성한 기사가 없어요.</td></tr>';
+    window.__mine=data;
+  }
+
+  window.rEdit=(id)=>{
+    const a=(window.__mine||[]).find(r=>r.id===id); if(!a)return;
+    $("a-id").value=a.id;$("a-title").value=a.title;$("a-lede").value=a.lede||"";
+    $("a-content").value=fromHtml(a.content);$("a-channel").value=a.channel_slug;
+    $("a-thumb").value=a.thumbnail_url||"";$("ed-title").textContent="✏️ 기사 수정";
+    window.scrollTo({top:0,behavior:"smooth"});
+  };
+  window.rDel=async(id)=>{ if(!confirm("이 기사를 삭제할까요?"))return; await sb.from("articles").delete().eq("id",id); loadMine(); };
+
+  init();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기자단 신청 - 정엘미디어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+.rp-wrap{max-width:560px;margin:0 auto;padding:56px 20px 90px}
+.rp-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:36px 32px}
+.rp-card h1{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:var(--brown);margin:0 0 10px;text-align:center}
+.rp-sub{font-size:14px;color:var(--txt-gray);text-align:center;line-height:1.8;margin-bottom:26px}
+.rp-row{margin-bottom:16px}
+.rp-row label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.rp-row input,.rp-row textarea,.rp-row select{width:100%;padding:12px 14px;border:1px solid var(--gray);border-radius:6px;font-size:14px;font-family:inherit;box-sizing:border-box}
+.rp-row textarea{min-height:120px;resize:vertical;line-height:1.7}
+.rp-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;padding:13px;cursor:pointer;margin-top:6px}
+.rp-btn:hover{background:var(--red-dark)}
+.rp-msg{font-size:14px;text-align:center;min-height:20px;margin-top:10px}
+.rp-msg.ok{color:#1a7a3a;font-weight:700}
+.rp-msg.err{color:var(--red)}
+.rp-status{text-align:center;padding:30px 10px}
+.rp-status .em{font-size:44px}
+.rp-status h2{font-family:'Noto Serif KR',serif;font-size:22px;color:var(--brown);margin:14px 0 8px}
+.rp-status p{font-size:14px;color:var(--txt-gray);line-height:1.8}
+.rp-benefit{font-size:12px;color:var(--txt-light);background:var(--bluegray);border-radius:8px;padding:14px 16px;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<div class="rp-wrap">
+  <div class="rp-card" id="card">
+    <div class="rp-status" style="display:none" id="loading"><div class="em">⏳</div><p>불러오는 중…</p></div>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+
+<script src="common.js"></script>
+<script>
+(function () {
+  const J = window.JUNGL;
+  J.renderHeader("");
+  J.renderFooter();
+  const $ = id => document.getElementById(id);
+  const sb = J.sb;
+  const card = $("card");
+  let user = null;
+
+  function view(html) { card.innerHTML = html; }
+
+  async function init() {
+    if (!sb) { view('<div class="rp-status"><div class="em">⚠️</div><p>일시적인 오류입니다. 잠시 후 다시 시도해 주세요.</p></div>'); return; }
+    const { data } = await sb.auth.getSession();
+    if (!data.session) { location.href = "member-login.html?redirect=" + encodeURIComponent("reporter-apply.html"); return; }
+    user = data.session.user;
+
+    const { data: prof } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    const st = prof && prof.reporter_status;
+
+    if (prof && prof.role === "reporter" && st === "approved") {
+      view('<div class="rp-status"><div class="em">✅</div><h2>이미 정엘미디어 기자님이세요</h2><p>바로 기사 작성 화면으로 이동합니다.</p></div>');
+      setTimeout(() => location.href = "write.html", 1200); return;
+    }
+    if (st === "pending") {
+      view('<div class="rp-status"><div class="em">📝</div><h2>신청이 접수되었습니다</h2><p>편집국에서 검토 중입니다. 승인되면 안내드릴게요.<br>승인 후 이 페이지에서 바로 글쓰기가 가능해집니다.</p></div>');
+      return;
+    }
+    if (st === "rejected") {
+      const reason = prof.reporter_reject_reason ? '<br><span style="color:var(--red)">사유: ' + prof.reporter_reject_reason + '</span>' : '';
+      showForm('이전 신청이 반려되었습니다.' + reason + '<br>내용을 보완해 다시 신청하실 수 있습니다.', prof);
+      return;
+    }
+    showForm('중소기업 오너를 위한 가업승계·절세 기사를 함께 만들어 갈 기자님을 모십니다.<br>승인 후 AI 도우미로 쉽게 기사를 작성하실 수 있어요.', prof);
+  }
+
+  function showForm(subHtml, prof) {
+    view(`
+      <h1>✍️ 기자단 신청</h1>
+      <p class="rp-sub">${subHtml}</p>
+      <div class="rp-row"><label>필명 / 기자명 *</label><input type="text" id="pen" placeholder="예: 정엘 김승계 기자" value="${(prof&&prof.reporter_pen_name)||''}"></div>
+      <div class="rp-row"><label>연락처</label><input type="tel" id="phone" placeholder="010-0000-0000" value="${(prof&&prof.phone)||''}"></div>
+      <div class="rp-row"><label>소개 / 관심 분야 / 경력 *</label><textarea id="bio" placeholder="어떤 분야의 기사를 쓰고 싶으신지, 관련 경험이 있다면 함께 적어주세요.">${(prof&&prof.reporter_bio)||''}</textarea></div>
+      <button class="rp-btn" id="submit">기자 신청하기</button>
+      <div class="rp-msg" id="msg"></div>
+      <div class="rp-benefit">신청해 주시면 편집국에서 검토 후 승인해 드립니다. 승인된 기자님은 정엘미디어 기사작성표준이 적용된 AI 도우미로 초안을 만들고, 편집국 승인 후 실제 신문에 발행됩니다.</div>
+    `);
+    $("submit").onclick = submit;
+  }
+
+  async function submit() {
+    const pen = $("pen").value.trim();
+    const phone = $("phone").value.trim();
+    const bio = $("bio").value.trim();
+    const msg = $("msg");
+    if (!pen) { msg.className="rp-msg err"; msg.textContent="필명을 입력해 주세요."; return; }
+    if (!bio) { msg.className="rp-msg err"; msg.textContent="소개/관심 분야를 입력해 주세요."; return; }
+    const row = {
+      id: user.id, email: user.email,
+      phone: phone || null,
+      reporter_pen_name: pen, reporter_bio: bio,
+      reporter_status: "pending", reporter_reject_reason: null,
+      reporter_applied_at: new Date().toISOString()
+    };
+    const { error } = await sb.from("profiles").upsert(row);
+    if (error) { msg.className="rp-msg err"; msg.textContent="신청 중 오류가 발생했습니다: " + error.message; return; }
+    view('<div class="rp-status"><div class="em">🎉</div><h2>신청이 완료되었습니다</h2><p>편집국에서 검토 후 승인해 드릴게요.<br>승인되면 이 페이지에서 바로 기사를 쓰실 수 있습니다.</p></div>');
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
