@@ -74,6 +74,26 @@
       <button class="btn btn-outline" id="btn-logout" style="float:right">로그아웃</button>
     </div>
 
+    <!-- 승인 대기 기사 (기자 제출) -->
+    <div class="admin-card" id="review-card" style="display:none">
+      <h2>🕒 승인 대기 기사</h2>
+      <p style="font-size:13px;color:#6b625f;margin:-4px 0 12px">기자가 제출한 기사입니다. 검토 후 승인하면 발행됩니다.</p>
+      <table class="admin-list">
+        <thead><tr><th>채널</th><th>제목</th><th>기자</th><th>제출일</th><th>관리</th></tr></thead>
+        <tbody id="review-body"></tbody>
+      </table>
+    </div>
+
+    <!-- 기자 신청 관리 -->
+    <div class="admin-card" id="applicant-card" style="display:none">
+      <h2>🧑‍💼 기자 신청 관리</h2>
+      <p style="font-size:13px;color:#6b625f;margin:-4px 0 12px">기자단 신청자입니다. 승인하면 AI 도우미로 기사를 작성할 수 있습니다.</p>
+      <table class="admin-list">
+        <thead><tr><th>필명</th><th>이메일/연락처</th><th>소개·경력</th><th>관리</th></tr></thead>
+        <tbody id="applicant-body"></tbody>
+      </table>
+    </div>
+
     <!-- 기사 목록 -->
     <div class="admin-card">
       <h2>📄 기사 관리</h2>
@@ -81,6 +101,36 @@
         <thead><tr><th>상태</th><th>채널</th><th>제목</th><th>날짜</th><th>조회</th><th>관리</th></tr></thead>
         <tbody id="list-body"></tbody>
       </table>
+    </div>
+
+    <!-- 경제지표 관리 -->
+    <div class="admin-card">
+      <h2>📈 경제지표 (홈 상단 띠)</h2>
+      <p style="font-size:13px;color:#6b625f;margin:-4px 0 12px">환율(달러·엔·유로)은 실시간 자동입니다. 아래 지수·금리 값만 갱신해 주세요. 변동률은 상승이면 +, 하락이면 - 로 시작(예: +0.82% / -1.20%).</p>
+      <div class="msg" id="mkt-msg"></div>
+      <table class="admin-list">
+        <thead><tr><th>지표</th><th>값</th><th>변동률(선택)</th></tr></thead>
+        <tbody>
+          <tr><td>코스피</td><td><input type="text" id="mkt-kospi" placeholder="예: 2,650.12" style="width:100%"></td><td><input type="text" id="mkt-kospi-d" placeholder="예: +0.82%" style="width:100%"></td></tr>
+          <tr><td>코스닥</td><td><input type="text" id="mkt-kosdaq" placeholder="예: 845.30" style="width:100%"></td><td><input type="text" id="mkt-kosdaq-d" placeholder="예: -0.35%" style="width:100%"></td></tr>
+          <tr><td>기준금리</td><td><input type="text" id="mkt-rate" placeholder="예: 3.50%" style="width:100%"></td><td><input type="text" id="mkt-rate-d" placeholder="(보통 비움)" style="width:100%"></td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn-red" id="btn-mkt-save" style="margin-top:10px">지표 저장</button>
+    </div>
+
+    <!-- 비밀번호 변경 -->
+    <div class="admin-card">
+      <h2>🔑 비밀번호 변경</h2>
+      <div class="msg" id="pw-msg"></div>
+      <div class="form-inline">
+        <div class="form-row"><label>새 비밀번호 (6자 이상)</label><input type="password" id="pw-new" minlength="6"></div>
+        <div class="form-row"><label>새 비밀번호 확인</label><input type="password" id="pw-new2" minlength="6"></div>
+      </div>
+      <button class="btn btn-outline" id="btn-pw-change">비밀번호 변경</button>
+      <p style="font-size:12px;color:#98908d;margin-top:12px">
+        * 현재 로그인된 계정의 비밀번호를 변경합니다. 회원(고객)이 비밀번호를 잊은 경우, Supabase 대시보드 &gt; Authentication &gt; Users 에서 해당 계정을 찾아 &quot;Send password reset&quot;으로 초기화 메일을 보낼 수 있습니다.
+      </p>
     </div>
   </div>
 
@@ -112,7 +162,7 @@
 
   // ── 세션 확인 ──
   sb.auth.getSession().then(({ data }) => {
-    if (data.session) { show("login-card", false); show("editor-area", true); loadList(); }
+    if (data.session) { show("login-card", false); show("editor-area", true); loadList(); loadApplicants(); loadReviews(); loadMarket(); }
     else show("login-card", true);
   });
 
@@ -219,6 +269,98 @@
   window.delArticle = async (id) => {
     if (!confirm("이 기사를 삭제할까요? 되돌릴 수 없습니다.")) return;
     await sb.from("articles").delete().eq("id", id); loadList();
+  };
+
+  // ── 기자 신청 관리 ──
+  async function loadApplicants() {
+    const { data } = await sb.from("profiles").select("*").eq("reporter_status", "pending").order("reporter_applied_at", { ascending: true });
+    const rows = data || [];
+    $("applicant-card").style.display = rows.length ? "block" : "none";
+    $("applicant-body").innerHTML = rows.map(p => `
+      <tr>
+        <td>${p.reporter_pen_name || "(미기재)"}</td>
+        <td style="font-size:12px">${p.email || ""}<br>${p.phone || ""}</td>
+        <td style="font-size:12px;max-width:280px">${(p.reporter_bio || "").replace(/</g,"&lt;")}</td>
+        <td>
+          <button onclick="approveReporter('${p.id}')">승인</button>
+          <button class="del" onclick="rejectReporter('${p.id}')">반려</button>
+        </td>
+      </tr>`).join("");
+  }
+  window.approveReporter = async (id) => {
+    const { error } = await sb.from("profiles").update({ role: "reporter", reporter_status: "approved", reporter_reject_reason: null }).eq("id", id);
+    if (error) return alert("승인 실패: " + error.message);
+    loadApplicants();
+  };
+  window.rejectReporter = async (id) => {
+    const reason = prompt("반려 사유(선택)를 입력하세요. 신청자에게 표시됩니다.", "");
+    if (reason === null) return;
+    const { error } = await sb.from("profiles").update({ reporter_status: "rejected", reporter_reject_reason: reason || "편집국 사정으로 반려되었습니다." }).eq("id", id);
+    if (error) return alert("반려 실패: " + error.message);
+    loadApplicants();
+  };
+
+  // ── 승인 대기 기사 검토 ──
+  async function loadReviews() {
+    const { data } = await sb.from("articles").select("*").eq("status", "review").order("submitted_at", { ascending: true });
+    const rows = data || [];
+    $("review-card").style.display = rows.length ? "block" : "none";
+    $("review-body").innerHTML = rows.map(a => `
+      <tr>
+        <td>${J.chName(a.channel_slug)}</td>
+        <td>${a.title}</td>
+        <td style="font-size:12px">${a.author || ""}</td>
+        <td>${J.fmtDate(a.submitted_at || a.created_at)}</td>
+        <td>
+          <button onclick="editArticle('${a.id}')">미리보기·수정</button>
+          <button onclick="approveArticle('${a.id}')">승인·발행</button>
+          <button class="del" onclick="rejectArticle('${a.id}')">반려</button>
+        </td>
+      </tr>`).join("");
+    window.__rows = (window.__rows || []).concat(rows);
+  }
+  window.approveArticle = async (id) => {
+    if (!confirm("이 기사를 승인하고 발행할까요?")) return;
+    const { error } = await sb.from("articles").update({ status: "published", published: true, reject_reason: null, published_at: new Date().toISOString() }).eq("id", id);
+    if (error) return alert("발행 실패: " + error.message);
+    loadReviews(); loadList();
+  };
+  window.rejectArticle = async (id) => {
+    const reason = prompt("반려 사유를 입력하세요. 기자에게 표시됩니다.", "");
+    if (reason === null) return;
+    const { error } = await sb.from("articles").update({ status: "rejected", published: false, reject_reason: reason || "편집국 검토 결과 반려되었습니다." }).eq("id", id);
+    if (error) return alert("반려 실패: " + error.message);
+    loadReviews(); loadList();
+  };
+
+  // ── 경제지표 관리 ──
+  async function loadMarket() {
+    const { data } = await sb.from("market_indicators").select("*");
+    const m = {}; (data || []).forEach(r => m[r.key] = r);
+    if (m.kospi) { $("mkt-kospi").value = m.kospi.value || ""; $("mkt-kospi-d").value = m.kospi.delta || ""; }
+    if (m.kosdaq) { $("mkt-kosdaq").value = m.kosdaq.value || ""; $("mkt-kosdaq-d").value = m.kosdaq.delta || ""; }
+    if (m.base_rate) { $("mkt-rate").value = m.base_rate.value || ""; $("mkt-rate-d").value = m.base_rate.delta || ""; }
+  }
+  $("btn-mkt-save").onclick = async () => {
+    const rows = [
+      { key: "kospi",     label: "코스피",   value: $("mkt-kospi").value.trim(),  delta: $("mkt-kospi-d").value.trim(),  sort: 1, updated_at: new Date().toISOString() },
+      { key: "kosdaq",    label: "코스닥",   value: $("mkt-kosdaq").value.trim(), delta: $("mkt-kosdaq-d").value.trim(), sort: 2, updated_at: new Date().toISOString() },
+      { key: "base_rate", label: "기준금리", value: $("mkt-rate").value.trim(),   delta: $("mkt-rate-d").value.trim(),   sort: 3, updated_at: new Date().toISOString() }
+    ];
+    const { error } = await sb.from("market_indicators").upsert(rows);
+    if (error) return msg("mkt-msg", "저장 실패: " + error.message, false);
+    msg("mkt-msg", "경제지표가 저장되었습니다. 홈 화면 상단에 반영됩니다.", true);
+  };
+
+  // ── 비밀번호 변경 ──
+  $("btn-pw-change").onclick = async () => {
+    const pw1 = $("pw-new").value, pw2 = $("pw-new2").value;
+    if (!pw1 || pw1.length < 6) return msg("pw-msg", "비밀번호는 6자 이상이어야 합니다.", false);
+    if (pw1 !== pw2) return msg("pw-msg", "비밀번호가 일치하지 않습니다.", false);
+    const { error } = await sb.auth.updateUser({ password: pw1 });
+    if (error) return msg("pw-msg", "변경 실패: " + error.message, false);
+    msg("pw-msg", "비밀번호가 변경되었습니다.", true);
+    $("pw-new").value = ""; $("pw-new2").value = "";
   };
 })();
 </script>
