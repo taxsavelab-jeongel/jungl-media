@@ -64,6 +64,7 @@
 
   if (!sb) { setMsg("일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", false); }
 
+  // 재설정 링크로 들어오면 Supabase가 자동으로 임시 세션(recovery)을 만들어 준다.
   let hasRecoverySession = false;
   if (sb) {
     sb.auth.onAuthStateChange((event) => {

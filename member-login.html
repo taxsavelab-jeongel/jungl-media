@@ -79,6 +79,7 @@
 
   if (!sb) { setMsg("일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", false); }
 
+  // 이미 로그인되어 있으면 바로 다음 단계로
   if (sb) {
     sb.auth.getSession().then(({ data }) => {
       if (data.session) location.href = nextUrl;
