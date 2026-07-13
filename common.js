@@ -1,5 +1,5 @@
 // ============================================
-// 정엘미디어 공용 스크립트 (루트 배포용 — 이 파일이 원본)
+// 가업승계저널 공용 스크립트 (루트 배포용 — 이 파일이 원본)
 // ============================================
 (function () {
   const C = window.JUNGL_CONFIG || {};
@@ -78,16 +78,32 @@
   function mktRow(label, value, delta) {
     return `<div class="mkt-row"><span class="lb">${label}</span><span class="vl">${value}${mktDelta(delta)}</span></div>`;
   }
+  // 관리자가 입력한 시각(updated_at)을 "M/D HH:mm" 형태로 표시 — 오늘 값인지 전일(또는 그 이전) 값인지
+  // 방문자가 스스로 판단할 수 있게 함 (실시간 지수 API가 없어 수동 입력을 보완하는 장치).
+  function fmtMktTime(ts) {
+    if (!ts) return "";
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return "";
+    const mm = d.getMonth() + 1, dd = d.getDate();
+    const hh = String(d.getHours()).padStart(2, "0"), mi = String(d.getMinutes()).padStart(2, "0");
+    return `${mm}/${dd} ${hh}:${mi}`;
+  }
   async function renderMarketBox(elId) {
     const el = document.getElementById(elId);
     if (!el) return;
     injectMktStyle();
     el.innerHTML = '<div class="mkt-loading">지표 불러오는 중…</div>';
     const items = [];
+    let idxTimeRaw = "";
     try {
       if (sb) {
         const { data } = await sb.from("market_indicators").select("*").order("sort", { ascending: true });
-        (data || []).forEach(m => { if (m.value) items.push(mktRow(m.label, m.value, m.delta)); });
+        (data || []).forEach(m => {
+          if (m.value) {
+            items.push(mktRow(m.label, m.value, m.delta));
+            if (m.updated_at && m.updated_at > idxTimeRaw) idxTimeRaw = m.updated_at;
+          }
+        });
       }
     } catch (e) {}
     // 환율: 3중 폴백 (frankfurter → open.er-api → jsdelivr currency-api)
@@ -114,8 +130,9 @@
       if (rt.JPY) items.push(mktRow("원/엔(100)", Math.round(100 / rt.JPY).toLocaleString(), ""));
       if (rt.EUR) items.push(mktRow("원/유로", Math.round(1 / rt.EUR).toLocaleString(), ""));
     }
+    const idxLabel = idxTimeRaw ? `지수 ${fmtMktTime(idxTimeRaw)} 기준` : "지수는 편집국 기준";
     el.innerHTML = (items.length ? items.join("") : '<div class="mkt-loading">지표 준비 중입니다.</div>')
-      + '<div class="mkt-src">환율 실시간 · 지수는 편집국 기준</div>';
+      + `<div class="mkt-src">환율 실시간 · ${idxLabel}</div>`;
   }
 
   function renderHeader(active) {
@@ -134,8 +151,8 @@
       </div></div>
       <header class="masthead"><div class="container">
         <a href="index.html" class="brand"><span>
-          <span class="logo"><span class="wordmark">정엘</span>
-            <span class="l-block">${lSvg}<span class="sub">미디어<br>MEDIA</span></span></span>
+          <span class="logo"><span class="wordmark">가업승계</span>
+            <span class="l-block">${lSvg}<span class="sub">저널<br>JOURNAL</span></span></span>
           <div class="brand-slogan"><b>중소기업 오너</b>를 위한 가업승계·절세 전문 신문</div>
         </span></a>
         <div class="head-cta">
@@ -174,12 +191,12 @@
       <div class="container">
         <div class="f-top">
           <div class="f-brand">
-            <span class="logo"><span class="wordmark">정엘</span>
-              <span class="l-block">${lSvg}<span class="sub">미디어<br>MEDIA</span></span></span>
+            <span class="logo"><span class="wordmark">가업승계</span>
+              <span class="l-block">${lSvg}<span class="sub">저널<br>JOURNAL</span></span></span>
             <p>가업승계 그 이상, 100년 기업의 이야기를 잇는 경제신문.<br>기대 이상의 가치와 진심을 드립니다.</p>
           </div>
           <div><h5>바로가기</h5><ul>
-            <li><a href="index.html">정엘미디어 홈</a></li>
+            <li><a href="index.html">가업승계저널 홈</a></li>
             <li><a href="${C.INSTITUTE_URL||"#"}" target="_blank" rel="noopener">정엘가업승계연구소</a></li>
             <li><a href="${C.YOUTUBE_URL||"#"}" target="_blank" rel="noopener">정엘 유튜브</a></li>
             <li><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener">회원가입</a></li>
@@ -202,7 +219,7 @@
           </table></div>
         </div>
         <div class="f-bottom">
-          <span>© ${new Date().getFullYear()} 정엘미디어 · 정엘가업승계연구소. All rights reserved.</span>
+          <span>© ${new Date().getFullYear()} 가업승계저널 · 정엘가업승계연구소. All rights reserved.</span>
           <span>본지 기사는 저작권법의 보호를 받습니다. 무단 전재·복사·배포 금지.</span>
         </div>
       </div>`;

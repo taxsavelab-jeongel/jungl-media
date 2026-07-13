@@ -1,12 +1,12 @@
 // ============================================
-// 정엘미디어 설정 파일 (루트 배포용 — 이 파일이 원본)
+// 가업승계저널 설정 파일 (루트 배포용 — 이 파일이 원본)
 // ============================================
 window.JUNGL_CONFIG = {
   SUPABASE_URL: "https://zininxukaybakogyflfq.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_bk_Mt_gi_l-IkRTqoroveQ_EAi_wr8r",
 
   // 사이트 기본 정보
-  SITE_NAME: "정엘미디어",
+  SITE_NAME: "가업승계저널",
   SLOGAN: "중소기업 오너를 위한 가업승계·절세 전문 신문",
   REG_NO: "등록번호 (등록 후 기재)",
   PUBLISHER: "정선의",

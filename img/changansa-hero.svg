@@ -13,7 +13,7 @@
 <text x="90" y="400" font-family="'Noto Serif KR','Nanum Myeongjo',serif" font-size="76" font-weight="900" letter-spacing="-2"><tspan fill="#ffb46b">이어져야</tspan><tspan fill="#ffffff"> 합니다</tspan></text>
 <rect x="90" y="445" width="110" height="5" fill="#C0111F"/>
 <text x="90" y="510" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="27" fill="#d8cfc7">가업승계 그 이상, 100년 기업의 이야기를 잇는</text>
-<text x="90" y="555" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="27" fill="#d8cfc7">경제신문 정엘미디어가 첫걸음을 내딛습니다.</text>
+<text x="90" y="555" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="27" fill="#d8cfc7">경제신문 가업승계저널이 첫걸음을 내딛습니다.</text>
 <g transform="translate(90,650)">
   <text x="0" y="28" font-family="'Noto Sans KR','Malgun Gothic',sans-serif" font-size="34" fill="#ffffff" font-weight="900">정엘</text>
   <polygon points="82,0 89,7 89,27 112,27 112,34 82,34" fill="#C0111F"/>
