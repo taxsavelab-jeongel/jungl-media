@@ -62,6 +62,29 @@
     setMeta('meta[name="twitter:image"]', "content", a.thumbnail_url);
   }
 
+  // 검색엔진(Googlebot 등 JS를 렌더링하는 크롤러)과 AI 검색이 기사를 정확히 이해하도록
+  // NewsArticle 구조화 데이터(JSON-LD)를 실제 기사 데이터로 삽입.
+  const ld = document.createElement("script");
+  ld.type = "application/ld+json";
+  ld.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": a.title,
+    "description": descText,
+    "datePublished": a.published_at,
+    "dateModified": a.updated_at || a.published_at,
+    "author": { "@type": "Person", "name": a.author || "정엘 편집국" },
+    "publisher": {
+      "@type": "NewsMediaOrganization",
+      "name": "가업승계저널",
+      "logo": { "@type": "ImageObject", "url": "https://zininxukaybakogyflfq.supabase.co/storage/v1/object/public/article-images/og-default.jpg" }
+    },
+    "image": a.thumbnail_url ? [a.thumbnail_url] : undefined,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": location.href },
+    "articleSection": J.chName(a.channel_slug)
+  });
+  document.head.appendChild(ld);
+
   const media = a.youtube_id
     ? `<div class="video"><iframe src="https://www.youtube.com/embed/${a.youtube_id}" allowfullscreen title="${a.title}"></iframe></div>`
     : (a.thumbnail_url ? `<img class="hero-img" src="${a.thumbnail_url}" alt="">` : "");
