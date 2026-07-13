@@ -37,12 +37,19 @@ header.masthead{background:var(--white);border-bottom:1px solid var(--line)}
 .btn-outline:hover{background:var(--brown);color:#fff}
 .btn-red{background:var(--red);color:#fff;font-weight:700}
 .btn-red:hover{background:var(--red-dark)}
-nav.gnb{background:var(--brown);position:sticky;top:0;z-index:100}
-.gnb ul{display:flex;list-style:none;overflow-x:auto}
-.gnb li a{display:block;padding:14px 20px;color:#e8ddd9;font-size:15px;font-weight:500;white-space:nowrap;border-bottom:3px solid transparent}
-.gnb li a:hover,.gnb li a.active{color:#fff;border-bottom-color:var(--red)}
-.gnb li.premier a{color:var(--gold-light);font-weight:700}
-.gnb li.premier a:hover{border-bottom-color:var(--gold)}
+/* 상단 가로 카테고리 바 — 한국경제·매일경제 스타일 참고.
+   흰 배경 + 얇은 아래 테두리로 헤더와 자연스럽게 이어지고, 카테고리는 텍스트 위주로 담백하게,
+   PREMIER만 유료 섹션임을 알리는 아웃라인 배지로 강조 (한경프리미엄9 배지 참고) */
+nav.gnb{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+.gnb ul{display:flex;align-items:center;list-style:none;overflow-x:auto;height:52px}
+.gnb li a{display:flex;align-items:center;padding:8px 16px;color:#3d3833;font-size:14.5px;font-weight:500;white-space:nowrap;letter-spacing:-.2px}
+.gnb li a:hover{color:var(--red)}
+.gnb li a.active{color:var(--red);font-weight:700;position:relative}
+.gnb li a.active::after{content:"";position:absolute;left:16px;right:16px;bottom:4px;height:2px;background:var(--red)}
+.gnb li.premier{margin-left:4px}
+.gnb li.premier a{color:var(--gold);font-weight:700;border:1px solid var(--gold-light);border-radius:20px;padding:6px 15px;margin-left:2px}
+.gnb li.premier a:hover{background:#faf6ee;color:#7a6234;border-color:#7a6234}
+.gnb li.premier a.active::after{content:none}
 .manifesto{background:linear-gradient(90deg,var(--brown-deep),var(--brown) 55%,#4a201a);color:#fff;text-align:center;padding:20px 16px}
 .manifesto .m1{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:900;letter-spacing:1px}
 .manifesto .m1 em{color:#ff8b95;font-style:normal}
