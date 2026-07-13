@@ -16,11 +16,11 @@ a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
 .container{max-width:1200px;margin:0 auto;padding:0 20px}
 .serif{font-family:'Noto Serif KR',serif}
-.topbar{background:var(--brown-deep);color:#c9b8b3;font-size:12px}
+.topbar{background:transparent;color:var(--txt-gray);font-size:12px;border-bottom:1px solid var(--line)}
 .topbar .container{display:flex;justify-content:space-between;align-items:center;height:34px}
-.topbar .reg{color:#a08d87}
-.topbar .util a{margin-left:16px;color:#c9b8b3}
-.topbar .util a:hover{color:#fff}
+.topbar .reg{color:var(--txt-light)}
+.topbar .util a{margin-left:16px;color:var(--txt-gray)}
+.topbar .util a:hover{color:var(--red)}
 header.masthead{background:var(--white);border-bottom:1px solid var(--line)}
 .masthead .container{display:flex;justify-content:space-between;align-items:center;padding:16px 20px}
 .brand{display:flex;align-items:center;gap:14px}
@@ -40,7 +40,7 @@ header.masthead{background:var(--white);border-bottom:1px solid var(--line)}
 /* 상단 가로 카테고리 바 — 한국경제·매일경제 스타일 참고.
    흰 배경 + 얇은 아래 테두리로 헤더와 자연스럽게 이어지고, 카테고리는 텍스트 위주로 담백하게,
    PREMIER만 유료 섹션임을 알리는 아웃라인 배지로 강조 (한경프리미엄9 배지 참고) */
-nav.gnb{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+nav.gnb{background:var(--bluegray);border-bottom:1px solid #d3e0e8;position:sticky;top:0;z-index:100}
 .gnb ul{display:flex;align-items:center;list-style:none;overflow-x:auto;height:52px}
 .gnb li a{display:flex;align-items:center;padding:8px 16px;color:#3d3833;font-size:14.5px;font-weight:500;white-space:nowrap;letter-spacing:-.2px}
 .gnb li a:hover{color:var(--red)}
