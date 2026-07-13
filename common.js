@@ -146,7 +146,7 @@
         : `<li><a href="channel.html?ch=${c.slug}" class="${active===c.slug?"active":""}">${c.name}</a></li>`).join("");
     document.getElementById("site-header").innerHTML = `
       <div class="topbar"><div class="container">
-        <span class="reg">${dateStr} · ${C.REG_NO || "인터넷신문 (등록 준비 중)"}</span>
+        <span class="reg">${dateStr}</span>
         <span class="util"><a href="write.html" id="nav-write" style="display:none"><b>✍️ 글쓰기</b></a><a href="contact.html">광고문의</a><a href="contact.html">기사제보</a><a href="reporter-apply.html">기자단·전문가</a><a href="${C.MEMBER_URL||"#"}" target="_blank" rel="noopener"><b>회원가입</b></a><a href="member-login.html">회원 로그인</a><a href="admin.html">관리자</a></span>
       </div></div>
       <header class="masthead"><div class="container">
