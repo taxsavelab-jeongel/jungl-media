@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>기자단·전문가 신청 - 정엘미디어</title>
+<title>기자단·전문가 신청 - 가업승계저널</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -65,7 +65,7 @@
 
     if (prof && prof.role === "reporter" && st === "approved") {
       const who = prof.reporter_type === "expert" ? "전문가 필진" : "기자님";
-      view('<div class="rp-status"><div class="em">✅</div><h2>이미 정엘미디어 ' + who + '이세요</h2><p>바로 기사 작성 화면으로 이동합니다.</p></div>');
+      view('<div class="rp-status"><div class="em">✅</div><h2>이미 가업승계저널 ' + who + '이세요</h2><p>바로 기사 작성 화면으로 이동합니다.</p></div>');
       setTimeout(() => location.href = "write.html", 1200); return;
     }
     if (st === "pending") {
@@ -100,7 +100,7 @@
       <div class="rp-row"><label>소개 / 관심 분야 / 경력 *</label><textarea id="bio" placeholder="어떤 분야의 글을 쓰고 싶으신지, 관련 경험·자격이 있다면 함께 적어주세요.">${(prof&&prof.reporter_bio)||''}</textarea></div>
       <button class="rp-btn" id="submit">신청하기</button>
       <div class="rp-msg" id="msg"></div>
-      <div class="rp-benefit">신청해 주시면 편집국에서 검토 후 승인해 드립니다. 승인되면 정엘미디어 기사작성표준이 적용된 AI 도우미로 초안을 만들고, 편집국 승인 후 실제 신문에 발행됩니다. 전문가 필진의 기사에는 이름·직함·소속이 함께 표기됩니다.</div>
+      <div class="rp-benefit">신청해 주시면 편집국에서 검토 후 승인해 드립니다. 승인되면 가업승계저널 기사작성표준이 적용된 AI 도우미로 초안을 만들고, 편집국 승인 후 실제 신문에 발행됩니다. 전문가 필진의 기사에는 이름·직함·소속이 함께 표기됩니다.</div>
     `);
     const sync = () => {
       const t = $("rtype").value;
