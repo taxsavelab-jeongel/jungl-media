@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>가업승계저널</title>
+<meta name="description" content="가업승계·절세·지배구조를 깊이 있게 다루는 중소기업 오너 전문 신문 가업승계저널">
+<meta property="og:title" content="가업승계저널 - 중소기업 오너를 위한 전문 신문">
+<meta property="og:description" content="가업승계·절세·지배구조를 깊이 있게 다루는 중소기업 오너 전문 신문 가업승계저널">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="가업승계저널">
+<meta property="og:image" content="https://zininxukaybakogyflfq.supabase.co/storage/v1/object/public/article-images/og-default.jpg">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="420">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="가업승계저널 - 중소기업 오너를 위한 전문 신문">
+<meta name="twitter:description" content="가업승계·절세·지배구조를 깊이 있게 다루는 중소기업 오너 전문 신문 가업승계저널">
+<meta name="twitter:image" content="https://zininxukaybakogyflfq.supabase.co/storage/v1/object/public/article-images/og-default.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -33,6 +45,22 @@
   if (!a) { wrap.innerHTML = "<p>기사를 찾을 수 없습니다.</p>"; return; }
 
   document.title = a.title + " - 가업승계저널";
+
+  // 실제 방문자 브라우저(공유 시트 등)를 위해 메타 태그도 기사 내용에 맞게 갱신.
+  // 카카오톡·페이스북 등 링크 공유 미리보기는 JS를 실행하지 않고 위 <head>의 기본값을
+  // 그대로 읽어가므로(og-default.jpg + 공용 설명), 기사별 정확한 미리보기가 꼭 필요하면
+  // /a/{기사ID}.html 정적 페이지 링크를 공유해 주세요.
+  const setMeta = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+  const descText = (a.lede || a.title).slice(0, 140);
+  setMeta('meta[name="description"]', "content", descText);
+  setMeta('meta[property="og:title"]', "content", a.title);
+  setMeta('meta[property="og:description"]', "content", descText);
+  setMeta('meta[name="twitter:title"]', "content", a.title);
+  setMeta('meta[name="twitter:description"]', "content", descText);
+  if (a.thumbnail_url) {
+    setMeta('meta[property="og:image"]', "content", a.thumbnail_url);
+    setMeta('meta[name="twitter:image"]', "content", a.thumbnail_url);
+  }
 
   const media = a.youtube_id
     ? `<div class="video"><iframe src="https://www.youtube.com/embed/${a.youtube_id}" allowfullscreen title="${a.title}"></iframe></div>`
