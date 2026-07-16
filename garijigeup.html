@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>가지급금 진단 | 정엘가업승계연구소</title>
+<meta name="description" content="법인 오너가 반드시 알아야 할 가지급금 30문항 진단. 실제 판결문 기준으로 우리 회사의 구멍을 찾습니다.">
+<meta property="og:title" content="가지급금 진단 · 정엘가업승계연구소">
+<meta property="og:description" content="실제 판결문이 요구한 항목으로 진단합니다. 30문항, 3분.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.jeongel.com/garijigeup.html">
+<meta property="og:site_name" content="정엘가업승계연구소">
+<link rel="canonical" href="https://www.jeongel.com/garijigeup.html">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF; --bg:#EDEEF0; --navy:#001848; --navy2:#16305C;
+  --red:#D80000; --red-soft:#FBECEC; --gold:#B5870A; --green:#1F6B4A; --green-soft:#EAF3EE;
+  --ink:#0E1C33; --gray:#5A6473; --grayL:#98A1AE; --line:#D6DAE1;
+  --rule:rgba(0,24,72,.055);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
+  background:var(--bg); color:var(--ink);
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+  /* 관공서 서류 격자 */
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 96px}
+
+/* ── 헤더 ── */
+.top{
+  position:sticky;top:0;z-index:50;background:var(--navy);
+  margin:0 -16px 0;padding:11px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{color:#fff;font-size:13px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
+.brand span{color:#8FA3C8;font-weight:500}
+.tel{color:var(--gold);font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
+.bar{height:3px;background:rgba(255,255,255,.12);margin:0 -16px;position:sticky;top:45px;z-index:50}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .35s cubic-bezier(.4,0,.2,1)}
+
+/* ── 카드 ── */
+.card{background:var(--paper);border:1px solid var(--line);padding:26px 22px;margin-top:18px}
+.card.flush{padding:0;overflow:hidden}
+
+/* ── 인트로 ── */
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--gold);margin-bottom:12px}
+h1{font-size:29px;font-weight:800;letter-spacing:-1px;line-height:1.28;margin-bottom:16px}
+h1 em{font-style:normal;color:var(--red)}
+.lede{font-size:15px;color:var(--gray);margin-bottom:20px}
+.lede b{color:var(--ink);font-weight:700}
+.quote{
+  border-left:3px solid var(--navy);background:#F6F7F9;
+  padding:14px 16px;margin:20px 0;font-size:14px;color:var(--gray)
+}
+.quote b{color:var(--navy)}
+.quote .said{color:var(--ink);font-weight:700;display:block;margin-top:8px;font-size:15px}
+.meta{display:flex;gap:22px;margin:22px 0 6px;padding-top:18px;border-top:1px solid var(--line)}
+.meta div{font-size:12px;color:var(--grayL)}
+.meta strong{display:block;font-size:19px;font-weight:800;color:var(--navy);letter-spacing:-.4px}
+
+/* ── 버튼 ── */
+.btn{
+  display:block;width:100%;border:0;cursor:pointer;
+  background:var(--navy);color:#fff;font-family:inherit;
+  font-size:16px;font-weight:800;letter-spacing:-.3px;padding:17px;
+  transition:background .15s
+}
+.btn:hover{background:var(--navy2)}
+.btn:active{transform:translateY(1px)}
+.btn.gold{background:var(--gold)}
+.btn.gold:hover{background:#9C7408}
+.btn.ghost{background:transparent;color:var(--gray);border:1px solid var(--line);font-size:14px;font-weight:600;padding:13px}
+.btn.ghost:hover{background:#F6F7F9;color:var(--ink)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ── 문항 ── */
+.part{padding:20px 22px 4px;border-bottom:1px solid var(--line);background:#FAFBFC}
+.part .n{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--gold)}
+.part h2{font-size:19px;font-weight:800;letter-spacing:-.5px;margin:5px 0 6px}
+.part p{font-size:13px;color:var(--gray);margin-bottom:16px}
+
+.q{padding:18px 22px;border-bottom:1px solid #EDEFF2}
+.q:last-child{border-bottom:0}
+.q .tag{
+  display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;
+  padding:2px 7px;margin-bottom:8px
+}
+.tag.crit{background:var(--red);color:#fff}
+.tag.warn{background:#FFF2E0;color:#8A5A00;border:1px solid #E8C88A}
+.q .t{font-size:15.5px;font-weight:600;line-height:1.5;margin-bottom:4px;letter-spacing:-.2px}
+.q .why{font-size:12.5px;color:var(--grayL);margin-bottom:13px;line-height:1.5}
+.q .why code{background:#F0F2F5;padding:1px 5px;font-size:11.5px;color:var(--navy2);font-family:inherit}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pick button{
+  border:1.5px solid var(--line);background:var(--paper);cursor:pointer;
+  font-family:inherit;font-size:14.5px;font-weight:700;padding:12px;color:var(--gray);
+  transition:all .12s
+}
+.pick button:hover{border-color:var(--grayL)}
+.pick button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.pick button.no[aria-pressed="true"]{background:var(--red);border-color:var(--red)}
+.pick button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ── 게이트 ── */
+.gate{background:var(--navy);color:#fff;padding:26px 22px;margin-top:18px}
+.gate h2{font-size:19px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px}
+.gate p{font-size:13.5px;color:#A9BAD8;margin-bottom:18px}
+.gate .pick button{background:transparent;border-color:rgba(255,255,255,.28);color:#C7D2E8}
+.gate .pick button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#fff}
+
+/* ── 결과 ── */
+.stamp-wrap{text-align:center;padding:40px 22px 30px;position:relative;background:var(--paper);border:1px solid var(--line);margin-top:18px}
+.stamp{
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  width:172px;height:172px;border-radius:50%;
+  border:5px solid var(--red);color:var(--red);
+  transform:rotate(-9deg);opacity:0;
+  animation:press .5s cubic-bezier(.2,1.4,.4,1) .15s forwards
+}
+@keyframes press{0%{opacity:0;transform:rotate(-9deg) scale(1.7)}60%{opacity:1}100%{opacity:1;transform:rotate(-9deg) scale(1)}}
+.stamp::before{content:'';position:absolute;width:152px;height:152px;border-radius:50%;border:1.5px solid currentColor}
+.stamp .lv{font-size:38px;font-weight:800;letter-spacing:-2px;line-height:1}
+.stamp .sub{font-size:12px;font-weight:700;letter-spacing:.1em;margin-top:6px}
+.stamp.g{border-color:var(--green);color:var(--green)}
+.stamp.y{border-color:var(--gold);color:var(--gold)}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none;opacity:1}}
+
+.score{margin-top:22px}
+.score .big{font-size:52px;font-weight:800;letter-spacing:-2.5px;line-height:1;color:var(--navy)}
+.score .big em{font-style:normal;font-size:20px;color:var(--grayL);font-weight:600;margin-left:2px}
+.score .cap{font-size:13px;color:var(--gray);margin-top:6px}
+.verdict{font-size:17px;font-weight:800;margin-top:16px;letter-spacing:-.4px}
+
+.hits{margin-top:18px}
+.hits h3{font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--gray);padding:0 22px 10px}
+.hit{display:flex;gap:11px;padding:13px 22px;border-top:1px solid #EDEFF2;align-items:flex-start}
+.hit i{
+  flex:0 0 auto;width:17px;height:17px;border-radius:50%;background:var(--red);color:#fff;
+  font-style:normal;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px
+}
+.hit.w i{background:var(--gold)}
+.hit div{font-size:14px;font-weight:600;line-height:1.45;letter-spacing:-.2px}
+.hit div span{display:block;font-size:12.5px;color:var(--grayL);font-weight:400;margin-top:3px}
+
+.cta{background:var(--navy);color:#fff;padding:30px 22px;margin-top:18px}
+.cta .eyebrow{color:var(--gold)}
+.cta h2{font-size:22px;font-weight:800;letter-spacing:-.7px;line-height:1.35;margin-bottom:12px}
+.cta p{font-size:14px;color:#A9BAD8;margin-bottom:6px;line-height:1.65}
+.cta p b{color:#fff;font-weight:700}
+.cta .btn{margin-top:20px}
+.cta .tel-lg{
+  display:block;text-align:center;margin-top:12px;color:var(--gold);
+  font-size:19px;font-weight:800;text-decoration:none;letter-spacing:-.3px
+}
+.foot{text-align:center;padding:26px 12px;font-size:11.5px;color:var(--grayL);line-height:1.7}
+.err{background:var(--red-soft);border:1px solid var(--red);color:#8E0000;padding:12px 16px;margin-top:18px;font-size:13.5px;font-weight:600;display:none}
+.hide{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">정엘가업승계연구소 <span>· 가지급금 진단</span></div>
+  <a class="tel" href="tel:010-5500-9632">010-5500-9632</a>
+</div>
+<div class="bar"><i id="bar"></i></div>
+
+<div class="wrap">
+
+  <!-- ══ 인트로 ══ -->
+  <section id="intro">
+    <div class="card">
+      <div class="eyebrow">수원지방법원 2024구합65431</div>
+      <h1>서류는 다 있었습니다.<br>그런데 <em>5억 상여처분</em>을<br>받았습니다.</h1>
+      <p class="lede">
+        두 대표님이 <b>똑같이</b> 특허권으로 가지급금을 정리했습니다. 감정평가서도 두 분 다 갖고 계셨습니다.
+        그런데 한 분은 <b>5억 상여처분</b>, 한 분은 <b>과세 취소</b>였습니다.
+      </p>
+      <div class="quote">
+        세무조사관이 물었습니다. <b>"연구노트, 직접 작성하신 게 맞습니까?"</b>
+        <span class="said">"제가 직접 작성한 것은 없습니다."</span>
+      </div>
+      <p class="lede" style="margin-bottom:0">
+        차이는 방법이 아니었습니다. <b>일이 벌어지기 전에 입증 데이터를 갖춰뒀느냐</b>였습니다.
+        이 진단은 실제 판결문이 요구한 항목으로 <b>우리 회사의 구멍</b>을 찾습니다.
+      </p>
+      <div class="meta">
+        <div><strong>30</strong>문항</div>
+        <div><strong>3</strong>분</div>
+        <div><strong>무료</strong>즉시 결과</div>
+      </div>
+    </div>
+    <button class="btn" style="margin-top:14px" onclick="start()">진단 시작하기</button>
+    <p class="foot">체크하신 답변은 서버에 저장되지 않습니다. 결과는 이 화면에서만 계산됩니다.</p>
+  </section>
+
+  <!-- ══ 문항 ══ -->
+  <section id="quiz" class="hide"></section>
+  <div class="err" id="err">답하지 않은 문항이 있습니다. 표시된 곳을 확인해 주십시오.</div>
+  <button class="btn gold hide" id="submit" style="margin-top:14px" onclick="grade()">결과 보기</button>
+
+  <!-- ══ 결과 ══ -->
+  <section id="result" class="hide"></section>
+
+</div>
+
+<script>
+/* ══════ 설정 ══════ */
+/*
+  구글폼 연동 — [정엘] 가지급금 정리 체크리스트 무료 신청
+  응답: (원본)정엘가업승계 인디비 종합 → [가지급금체크리스트신청] 탭
+  신청 즉시 이메일로 체크리스트 PDF 자동 발송 (기존 자동화)
+
+  [현재] 성함·연락처·회사명·이메일만 수집. 진단 점수는 전달되지 않음.
+  [추후] 폼에 아래 5문항을 추가하면 점수까지 자동 전달됩니다.
+         지역 / 상담받고 싶은 부분 / 진단 점수 / 진단 등급 / 치명 항목
+         → 추가 후 ENTRY의 score·level·weak에 새 entry ID를 넣고 PREFILL을 true로.
+*/
+const CONFIG = {
+  FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSdmpPNj6sEBfd1AYkzvaXap12EFrk3oPdxVwoQAPa0ShYlSSg/viewform',
+  PREFILL: false,
+  ENTRY: {
+    score:  '',
+    level:  '',
+    weak:   '',
+    source: ''
+  },
+  SOURCE: '가지급금진단앱'
+};
+
+/* ══════ 문항 ══════ */
+const Q = [
+  {p:'PART 1', h:'진단', d:'우리 회사는 지금 어디에 있나', items:[
+    {t:'재무제표상 가지급금 잔액을 정확히 알고 있다', w:'단기대여금·주임종단기채권 포함'},
+    {t:'그 가지급금이 언제, 왜 발생했는지 설명할 수 있다'},
+    {t:'최근 3년간 가지급금이 늘었는지 줄었는지 안다'},
+    {t:'지금도 새로 쌓이고 있는지 안다', w:'개인카드·접대비 등'},
+    {t:'내 주식의 취득가액이 얼마인지 안다', w:'설립 출자금뿐 아니라 증자·지분 재매입 이력이 전부 반영돼야 합니다', c:1}
+  ]},
+  {p:'PART 2', h:'새고 있는 돈', d:'개인 · 회사 · 승계 세 곳을 확인하십시오', items:[
+    {t:'법인에 인정이자를 실제로 이체하고 있다', w:'장부 계상만 하고 실제 이체가 없으면 인정되지 않습니다', c:1},
+    {t:'적용 이자율을 안다', w:'<code>당좌대출이자율 4.6%</code> 또는 <code>법인 차입금 이자 가중평균</code> — 가중평균 선택 시 3년 유지'},
+    {t:'이자를 안 내면 그 금액이 대표 상여로 소득처분된다는 것을 안다', w:'법인세법 §67, 시행령 §106①'},
+    {t:'은행 이자 중 일부가 비용으로 인정 안 된다는 것을 안다', w:'법인세법 §28①4호'},
+    {t:'가지급금이 주식가치를 올려 상속·증여세를 키운다는 것을 안다', w:'상증세법 §63 · 시행령 §54'}
+  ]},
+  {p:'PART 3', h:'예방', d:'정리보다 지혈이 먼저입니다', items:[
+    {t:'최근 3년 가지급금 증감 내역표를 작성해 원인을 진단했다'},
+    {t:'금전소비대차계약서가 있고, 이사회 결의로 의결했다'},
+    {t:'계약서에 공증 또는 확정일자를 받아 두었다', w:'"언제 정한 조건이냐"에 답하려면 필요합니다'},
+    {t:'매 분기 실제로 이자를 이체하고, 장부에 미수이자를 계상한다', w:'서류와 자금 흐름은 반드시 함께 가야 합니다', c:1}
+  ]},
+];
+
+const GATE = {
+  h:'특허권으로 가지급금을 정리하셨거나, 검토 중이십니까?',
+  d:'가장 분쟁이 많은 유형입니다. 해당하시면 판결문이 요구한 9개 항목을 추가로 확인합니다.'
+};
+
+const Q_PATENT = {p:'PART 4', h:'특허권', d:'실제 판결문에서 법원이 따진 항목입니다', items:[
+  {t:'회사에 기업부설연구소가 있다', w:'법원: "연구소의 인력 및 물적 시설을 활용하지 않을 동기나 이유를 찾기 어렵다"', r:1},
+  {t:'출원 수수료·변리사 비용을 회사가 냈다', r:1},
+  {t:'컨설팅 업체가 연구일지를 대신 써줬다', w:'판결에서 결정적이었던 정황입니다', r:1, c:1},
+  {t:'대표님이 직접 쓴 연구노트가 있다', w:'과세가 취소된 사례에서는 <code>42쪽</code>이었습니다', c:1},
+  {t:'그 노트에 시행착오 과정과 자필 기재·스케치가 있다', w:'법원: "\'오류의 발견과 수정\' 같은 시행착오 내용이 없고, 자필 기재를 찾아볼 수 없다"'},
+  {t:'재료 구입·실험·시제품 제작에 개인 자금을 투입한 증빙이 있다', w:'출원·변리사 비용 약 194만원은 "고안·완성에 직접 소요된 비용이라 할 수 없다"고 봤습니다'},
+  {t:'외부 감정평가 전문기관에 의뢰했고, 그 객관성을 설명할 수 있다'},
+  {t:'그 특허의 매출 기여도를 데이터로 입증할 수 있다'},
+  {t:'양도 시 상법 §398에 따른 이사회 승인을 거쳤다'}
+]};
+
+const Q_TAIL = [
+  {p:'PART 5', h:'다른 방법', d:'검토 중이거나 이미 실행하신 것이 있다면', items:[
+    {t:'(퇴직금) 정관에 임원 퇴직금 지급 규정과 배수가 사전에 정해져 있다', w:'규정 없이 지급하면 손금 부인'},
+    {t:'(이익소각) 절차 기한을 안다', w:'<code>2주 전 서면통지</code> · <code>1개월 내 지급</code> · <code>2주 내 등기</code>'},
+    {t:'(감액배당) 2026.1.1.부터 취득가액 초과분이 과세된다는 것을 안다', w:'"전액 비과세"는 옛말입니다 — 소득세법 시행령 §26의3 개정', c:1},
+    {t:'(출자전환) 감정평가로 시가를 입증했다', w:'액면가 전환은 경제적 합리성 결여로 부인됩니다'}
+  ]},
+  {p:'PART 6', h:'사후관리', d:'여기서 끝이 아닙니다', items:[
+    {t:'세무조사는 실행 후 몇 년 뒤에 온다는 것을 안다'},
+    {t:'그때 누가 소명해 줄지 정해져 있다', w:'서류를 만들어준 곳은 그때 없습니다', c:1},
+    {t:'상여처분되면 회사가 원천징수세액을 먼저 물고, 소송도 회사가 한다는 것을 안다', w:'대법원 2002두1878 전합'}
+  ]}
+];
+
+/* ══════ 렌더 ══════ */
+let A = {}, patentOn = null;
+
+function qhtml(sec, base){
+  let h = `<div class="card flush"><div class="part"><div class="n">${sec.p}</div><h2>${sec.h}</h2><p>${sec.d}</p></div>`;
+  sec.items.forEach((it,i)=>{
+    const id = base+i;
+    const tag = it.c ? `<div class="tag crit">치명</div>` : (it.r ? `<div class="tag warn">위험 신호</div>` : '');
+    const yes = it.r ? '예, 해당합니다' : '예';
+    const no  = it.r ? '아니오' : '아니오';
+    h += `<div class="q" id="q${id}">${tag}
+      <div class="t">${it.t}</div>
+      ${it.w?`<div class="why">${it.w}</div>`:''}
+      <div class="pick">
+        <button type="button" aria-pressed="false" onclick="pick('${id}',1,this)">${yes}</button>
+        <button type="button" class="no" aria-pressed="false" onclick="pick('${id}',0,this)">${no}</button>
+      </div></div>`;
+  });
+  return h + '</div>';
+}
+
+function start(){
+  document.getElementById('intro').classList.add('hide');
+  const q = document.getElementById('quiz');
+  q.classList.remove('hide');
+  let h = '';
+  Q.forEach((s,si)=> h += qhtml(s,'a'+si+'_'));
+  h += `<div class="gate" id="gate"><h2>${GATE.h}</h2><p>${GATE.d}</p>
+    <div class="pick">
+      <button type="button" aria-pressed="false" onclick="gate(1,this)">예 / 검토 중</button>
+      <button type="button" aria-pressed="false" onclick="gate(0,this)">아니오</button>
+    </div></div>`;
+  h += `<div id="patent"></div>`;
+  Q_TAIL.forEach((s,si)=> h += qhtml(s,'c'+si+'_'));
+  q.innerHTML = h;
+  document.getElementById('submit').classList.remove('hide');
+  window.scrollTo({top:0});
+  prog();
+}
+
+function gate(v, el){
+  patentOn = v;
+  el.parentNode.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  el.setAttribute('aria-pressed','true');
+  const box = document.getElementById('patent');
+  if(v){ box.innerHTML = qhtml(Q_PATENT,'b_'); }
+  else { box.innerHTML=''; Object.keys(A).forEach(k=>{ if(k.startsWith('b_')) delete A[k]; }); }
+  prog();
+}
+
+function pick(id, v, el){
+  A[id] = v;
+  el.parentNode.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  el.setAttribute('aria-pressed','true');
+  document.getElementById('q'+id).style.background='';
+  prog();
+}
+
+function all(){
+  const list = [];
+  Q.forEach((s,si)=> s.items.forEach((it,i)=> list.push({id:'a'+si+'_'+i, it})));
+  if(patentOn) Q_PATENT.items.forEach((it,i)=> list.push({id:'b_'+i, it}));
+  Q_TAIL.forEach((s,si)=> s.items.forEach((it,i)=> list.push({id:'c'+si+'_'+i, it})));
+  return list;
+}
+
+function prog(){
+  const list = all();
+  const done = list.filter(x=> A[x.id]!==undefined).length + (patentOn!==null?1:0);
+  const tot = list.length + 1;
+  document.getElementById('bar').style.width = Math.round(done/tot*100)+'%';
+}
+
+/* ══════ 채점 ══════ */
+function grade(){
+  const list = all();
+  const miss = list.filter(x=> A[x.id]===undefined);
+  const gateMiss = patentOn===null;
+  if(miss.length || gateMiss){
+    document.getElementById('err').style.display='block';
+    miss.forEach(x=> document.getElementById('q'+x.id).style.background='#FBECEC');
+    if(gateMiss) document.getElementById('gate').scrollIntoView({block:'center'});
+    else document.getElementById('q'+miss[0].id).scrollIntoView({block:'center'});
+    return;
+  }
+  document.getElementById('err').style.display='none';
+
+  // 위험 판정: 일반 항목은 '아니오'(0)가 위험 / r 항목은 '예'(1)이 위험
+  const bad = list.filter(x => x.it.r ? A[x.id]===1 : A[x.id]===0);
+  const n = bad.length;
+  const crit = bad.filter(x=> x.it.c);
+
+  let lv, sub, cls, verdict, advice;
+  if(n<=3){ lv='관리'; sub='LEVEL 1'; cls='g'; verdict='관리되고 있습니다';
+    advice='큰 구멍은 없습니다. 다만 법은 매년 바뀝니다. 연 1회 점검으로 유지하십시오.'; }
+  else if(n<=8){ lv='구멍'; sub='LEVEL 2'; cls='y'; verdict='구멍이 있습니다';
+    advice='실행 전에 반드시 전문가 검토를 받으십시오. 지금 상태로 진행하면 몇 년 뒤 통지서가 올 수 있습니다.'; }
+  else if(n<=15){ lv='위험'; sub='LEVEL 3'; cls=''; verdict='위험합니다';
+    advice='지금 진행 중인 절세가 있다면 일단 멈추십시오. 서류를 더 만들기 전에 진단이 먼저입니다.'; }
+  else { lv='방치'; sub='LEVEL 4'; cls=''; verdict='방치 상태입니다';
+    advice='가지급금이 매년 커지고 있습니다. 승계 시점에는 손쓸 수 없습니다. 즉시 진단이 필요합니다.'; }
+
+  const url = new URL(CONFIG.FORM_URL);
+  if (CONFIG.PREFILL) {
+    const put = (k,v) => { if (CONFIG.ENTRY[k]) url.searchParams.set(CONFIG.ENTRY[k], v); };
+    put('score',  n + '개');
+    put('level',  sub + ' ' + lv);
+    put('weak',   crit.length ? crit.map(x=>x.it.t).join(' / ') : '없음');
+    put('source', CONFIG.SOURCE);
+  }
+
+  let hits = '';
+  if(crit.length){
+    hits += `<div class="card flush hits"><h3>치명 항목 — 하나만 걸려도 위험합니다</h3>`;
+    crit.forEach(x=> hits += `<div class="hit"><i>!</i><div>${x.it.t}${x.it.w?`<span>${x.it.w.replace(/<\/?code>/g,'')}</span>`:''}</div></div>`);
+    hits += `</div>`;
+  }
+  const other = bad.filter(x=> !x.it.c);
+  if(other.length){
+    hits += `<div class="card flush hits"><h3>보완이 필요한 항목 ${other.length}개</h3>`;
+    other.forEach(x=> hits += `<div class="hit w"><i>·</i><div>${x.it.t}</div></div>`);
+    hits += `</div>`;
+  }
+
+  document.getElementById('quiz').classList.add('hide');
+  document.getElementById('submit').classList.add('hide');
+  const r = document.getElementById('result');
+  r.classList.remove('hide');
+  r.innerHTML = `
+    <div class="stamp-wrap">
+      <div class="stamp ${cls}"><div class="lv">${lv}</div><div class="sub">${sub}</div></div>
+      <div class="score">
+        <div class="big">${n}<em> / ${list.length}</em></div>
+        <div class="cap">구멍이 확인된 항목</div>
+        <div class="verdict">${verdict}</div>
+      </div>
+    </div>
+    ${hits}
+    <div class="card">
+      <p class="lede" style="margin:0">${advice}</p>
+    </div>
+    <div class="cta">
+      <div class="eyebrow">체크리스트 PDF · 무료 상담</div>
+      <h2>"이거, 나 혼자 하기는<br>어렵겠다."</h2>
+      <p>맞습니다. 그게 정상입니다.</p>
+      <p>방법은 이 진단에 다 나와 있습니다. 그런데 <b>그 방법이 우리 회사에 맞는지</b>, <b>무엇부터 갖춰야 하는지</b>,
+      <b>몇 년 뒤 조사관이 물을 때 누가 답할지</b>는 이 화면이 대신해 드릴 수 없습니다.</p>
+      <p style="margin-top:14px">저희는 방법을 파는 곳이 아니라, <b>대표님 회사에 맞는지 진단하고 정교하게 집도한 뒤 끝까지 관리하는 곳</b>입니다.</p>
+      <p style="margin-top:14px;color:#fff"><b>신청하시면 「가지급금 정리 체크리스트」 PDF를 즉시 이메일로 보내드립니다.</b></p>
+      <a class="btn gold" href="${url.toString()}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">체크리스트 받고 상담 신청하기</a>
+      <a class="tel-lg" href="tel:010-5500-9632">010-5500-9632</a>
+    </div>
+    <button class="btn ghost" style="margin-top:12px" onclick="location.reload()">다시 진단하기</button>
+    <p class="foot">
+      본 진단의 세율·법령은 2026년 7월 기준 현행이며, 개정에 따라 변동될 수 있습니다.<br>
+      개별 회사의 지분 구조·재무 상황에 따라 결과가 달라지므로 실제 적용 전 반드시 전문가의 개별 검토가 필요합니다.<br>
+      본 자료는 일반적인 정보 제공 목적이며 특정 거래에 대한 세무 자문이 아닙니다.<br><br>
+      <b>정엘가업승계연구소</b> · 상담 010-5500-9632<br>
+      <a href="https://www.jeongel.com/" style="color:var(--navy);text-decoration:none;font-weight:700">가업승계저널 홈</a>
+      &nbsp;·&nbsp;
+      <a href="https://www.jeongel.com/premier.html" style="color:var(--navy);text-decoration:none;font-weight:700">정엘 프리미어</a>
+    </p>`;
+  document.getElementById('bar').style.width='100%';
+  window.scrollTo({top:0});
+}
+</script>
+</body>
+</html>
