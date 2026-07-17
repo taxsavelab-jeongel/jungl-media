@@ -9,7 +9,7 @@ window.JUNGL_CONFIG = {
   SITE_NAME: "가업승계저널",
   SLOGAN: "중소기업 오너를 위한 가업승계·절세 전문 신문",
   REG_NO: "등록번호 (등록 후 기재)",
-  PUBLISHER: "정선의",
+  PUBLISHER: "우예슬",   // 2026-07-17 변경: 인터넷신문 등록 주체를 우예슬 개인사업자로 확정 (개인 등록은 신청인=발행인)
   EDITOR: "우예슬",
   YOUTH_OFFICER: "우예슬",
   EMAIL: "taxsavelab@gmail.com",
