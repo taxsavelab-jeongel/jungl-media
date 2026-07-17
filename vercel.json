@@ -5,7 +5,20 @@
       "includeFiles": "article-shell.html"
     }
   },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "jungl-media.vercel.app" }],
+      "destination": "https://jeongel.com/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/article.html", "destination": "/api/article" }
+    { "source": "/article.html", "destination": "/api/article" },
+    { "source": "/a/:path*", "destination": "/api/article?id=:path*&src=a" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/rss.xml", "destination": "/api/rss" },
+    { "source": "/feed", "destination": "/api/rss" },
+    { "source": "/llms.txt", "destination": "/api/llms" }
   ]
 }
