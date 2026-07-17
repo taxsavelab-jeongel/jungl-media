@@ -58,6 +58,33 @@ async function fetchArticle(id) {
   return Array.isArray(rows) ? rows[0] : null;
 }
 
+// 본문에서 FAQ 패턴(<h3>Q. 질문?</h3><p>답변</p>)을 찾아 FAQPage 구조화 데이터 생성
+// — AI 검색엔진(구글 AI Overview·ChatGPT·Perplexity)이 질문-답변을 직접 추출할 수 있게 함
+function extractFaq(content) {
+  const items = [];
+  const re = /<h3[^>]*>\s*(?:Q[.)]?\s*)?([^<]{5,200}\?)\s*<\/h3>\s*<p>([\s\S]*?)<\/p>/g;
+  const src = String(content || "");
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    const q = stripTags(m[1]).trim();
+    const ans = stripTags(m[2]).trim().slice(0, 600);
+    if (q && ans) items.push({ q, a: ans });
+    if (items.length >= 8) break;
+  }
+  return items.length >= 2 ? items : null;
+}
+function faqJsonLd(faq) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a }
+    }))
+  };
+}
+
 function buildJsonLd(a, canonUrl, descPlain) {
   return {
     "@context": "https://schema.org",
@@ -88,6 +115,10 @@ function renderFullPage(a, id) {
   const chName = CHANNELS[a.channel_slug] || a.channel_slug || "";
   const dateStr = (a.published_at || "").slice(0, 10);
   const jsonLd = buildJsonLd(a, canonUrl, descPlain);
+  const faq = extractFaq(a.content);
+  const faqLdTag = faq
+    ? `\n<script type="application/ld+json">${JSON.stringify(faqJsonLd(faq))}</script>`
+    : "";
   const video = a.youtube_id
     ? `<div class="video"><iframe src="https://www.youtube.com/embed/${esc(a.youtube_id)}" title="${title}" allowfullscreen loading="lazy"></iframe></div>\n`
     : "";
@@ -111,7 +142,7 @@ function renderFullPage(a, id) {
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${img}">
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
+<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>${faqLdTag}
 <style>
 body{margin:0;padding:24px 16px;background:#fff;color:#222;font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;line-height:1.75}
 main{max-width:720px;margin:0 auto}
@@ -190,6 +221,10 @@ module.exports = async (req, res) => {
         // 표준(canonical) 주소는 항상 /a/{id}.html 로 통일 — 중복 색인 방지
         const canonUrl = esc(`${SITE_URL}/a/${encodeURIComponent(id)}.html`);
         const jsonLd = buildJsonLd(a, `${SITE_URL}/a/${id}.html`, descPlain);
+        const faq = extractFaq(a.content);
+        const faqLdTag = faq
+          ? `\n<script type="application/ld+json">${JSON.stringify(faqJsonLd(faq))}</script>`
+          : "";
 
         metaBlock = `<title>${title} - 가업승계저널</title>
 <meta name="description" content="${desc}">
@@ -206,7 +241,7 @@ module.exports = async (req, res) => {
 <meta name="twitter:description" content="${desc}">
 <meta name="twitter:image" content="${img}">
 <link rel="canonical" href="${canonUrl}">
-<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>${faqLdTag}`;
       }
     } catch (e) {
       // 조회 실패 시에도 페이지는 항상 열려야 하므로 기본 메타로 진행
