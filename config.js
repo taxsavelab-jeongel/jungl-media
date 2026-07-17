@@ -9,11 +9,11 @@ window.JUNGL_CONFIG = {
   SITE_NAME: "가업승계저널",
   SLOGAN: "중소기업 오너를 위한 가업승계·절세 전문 신문",
   REG_NO: "등록번호 (등록 후 기재)",
-  PUBLISHER: "우예슬",   // 2026-07-17 변경: 인터넷신문 등록 주체를 우예슬 개인사업자로 확정 (개인 등록은 신청인=발행인)
-  EDITOR: "우예슬",
-  YOUTH_OFFICER: "우예슬",
+  PUBLISHER: "우예슬",   // 2026-07-17 확정: 등록 주체 우예슬 개인사업자 (개인 등록은 신청인=발행인)
+  EDITOR: "정선의",      // 2026-07-17 확정: 편집인 정선의
+  YOUTH_OFFICER: "정선의",
   EMAIL: "taxsavelab@gmail.com",
-  ADDRESS: "서울특별시 서초구 반포대로 79 (1층 정엘스튜디오, 5층 정엘가업승계연구소)",
+  ADDRESS: "충청남도 천안시 동남구 문암로 274, 교육관 103호 (안서동)",   // 2026-07-17 발행소 확정
   PHONE: "02-523-3757",
   SMS_PHONE: "010-5000-9632",
   CONSULT_URL: "https://www.jeongel.co.kr/contact#w202508060bc4acd979b35",    // 상담 신청 — 폼에 바로 도착
