@@ -11,6 +11,12 @@
       "has": [{ "type": "host", "value": "jungl-media.vercel.app" }],
       "destination": "https://jeongel.com/:path*",
       "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.jeongel.com" }],
+      "destination": "https://jeongel.com/:path*",
+      "permanent": true
     }
   ],
   "rewrites": [
