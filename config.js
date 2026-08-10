@@ -15,7 +15,7 @@ window.JUNGL_CONFIG = {
   EMAIL: "taxsavelab@gmail.com",
   ADDRESS: "충청남도 천안시 동남구 문암로 274, 교육관 103호 (안서동)",   // 2026-07-17 발행소 확정
   PHONE: "02-523-3757",
-  SMS_PHONE: "010-5000-9632",
+  SMS_PHONE: "010-5500-9632",   // 2026-08-10 대표 확인값으로 정정 (이전 010-5000-9632는 오기)
   CONSULT_URL: "https://www.jeongel.co.kr/contact#w202508060bc4acd979b35",    // 상담 신청 — 폼에 바로 도착
   MEMBER_URL: "https://docs.google.com/forms/d/e/1FAIpQLSfSp_EPFpXqQ87atqJ1qTUQ8ZUmyQNa4SKC9RVRBsWY1SvbzQ/viewform", // 회원가입 폼
   KAKAO_CHANNEL_URL: "https://pf.kakao.com/_KIcfK",          // 카카오톡 채널 (상담 바로가기: https://pf.kakao.com/_KIcfK/chat)
