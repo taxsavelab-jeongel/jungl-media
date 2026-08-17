@@ -36,6 +36,8 @@
 .wr-list button{font-size:12px;padding:5px 10px;margin-right:4px;border:1px solid var(--gray);background:#fff;border-radius:5px;cursor:pointer}
 .gen-box{background:var(--bluegray);border-radius:8px;padding:16px 18px;margin-bottom:16px}
 #gen-spin{display:none;font-size:13px;color:var(--brown);font-weight:700;margin-top:8px}
+.seo-box{background:#faf7f2;border:1px dashed #d9c9ac;border-radius:8px;padding:14px 16px;margin-bottom:14px}
+.seo-box .hint{margin:2px 0 12px}
 </style>
 </head>
 <body>
@@ -116,8 +118,18 @@
         <h2 id="ed-title">📝 기사 작성</h2>
         <div class="hint">서명: <b>${penName}</b> · 저장하면 편집국 승인 후 발행됩니다.</div>
         <input type="hidden" id="a-id">
-        <div class="wr-row"><label>제목 *</label><input type="text" id="a-title" placeholder="기사 제목"></div>
+        <div class="wr-row"><label>제목 *</label><input type="text" id="a-title" placeholder="기사 제목 (화면·SNS에 보이는 후킹형 헤드라인)"></div>
         <div class="wr-row"><label>요약(부제)</label><input type="text" id="a-lede" placeholder="1~2문장 요약"></div>
+
+        <div class="seo-box">
+          <h2 style="font-size:15px;margin-bottom:2px">🔍 검색 최적화(SEO)</h2>
+          <div class="hint">독자가 실제로 검색창에 칠 만한 말을 넣어주세요. 제목은 후킹형으로 쓰고, 이 두 칸으로 검색엔진이 보는 &lt;title&gt; 태그를 따로 관리합니다. (안 채우면 위 제목이 그대로 쓰입니다)</div>
+          <div class="wr-inline">
+            <div class="wr-row"><label>대표 키워드</label><input type="text" id="a-keyword" placeholder="예: 가지급금 정리 방법"></div>
+            <div class="wr-row" style="flex:2"><label>SEO 제목</label><input type="text" id="a-seo-title" placeholder="예: 가지급금 정리 방법 총정리 — 잘못 고르면 세금이 두 번 나온다"></div>
+          </div>
+        </div>
+
         <div class="wr-inline">
           <div class="wr-row"><label>채널 *</label><select id="a-channel">${chOpts}</select></div>
           <div class="wr-row"><label>대표 이미지</label><input type="file" id="a-thumb-file" accept="image/*"><div class="hint" id="thumb-status"></div><input type="text" id="a-thumb" placeholder="이미지 URL" style="margin-top:6px"></div>
@@ -157,6 +169,8 @@
         $("a-title").value = data.title || "";
         $("a-lede").value = data.lede || "";
         $("a-content").value = fromHtml(data.content || "");
+        $("a-keyword").value = data.keyword || "";
+        $("a-seo-title").value = data.seoTitle || "";
         $("a-channel").value = $("g-channel").value;
         msg("gen-msg","초안이 완성됐어요! 아래에서 확인·수정 후 저장하세요.",true);
         $("a-title").scrollIntoView({behavior:"smooth"});
@@ -180,7 +194,7 @@
   }
 
   function resetForm() {
-    ["a-id","a-title","a-lede","a-content","a-thumb"].forEach(i=>$(i).value="");
+    ["a-id","a-title","a-lede","a-content","a-thumb","a-keyword","a-seo-title"].forEach(i=>$(i).value="");
     $("a-channel").value=J.CHANNELS[0].slug; $("ed-title").textContent="📝 기사 작성"; $("thumb-status").textContent="";
   }
 
@@ -193,6 +207,8 @@
       title, lede:$("a-lede").value.trim(), content:toHtml(content),
       channel_slug:$("a-channel").value, author: byline,
       thumbnail_url:$("a-thumb").value.trim(),
+      target_keyword:$("a-keyword").value.trim(),
+      seo_title:$("a-seo-title").value.trim(),
       is_featured:false, published:false, status,
       author_id:user.id
     };
@@ -226,7 +242,8 @@
     const a=(window.__mine||[]).find(r=>r.id===id); if(!a)return;
     $("a-id").value=a.id;$("a-title").value=a.title;$("a-lede").value=a.lede||"";
     $("a-content").value=fromHtml(a.content);$("a-channel").value=a.channel_slug;
-    $("a-thumb").value=a.thumbnail_url||"";$("ed-title").textContent="✏️ 기사 수정";
+    $("a-thumb").value=a.thumbnail_url||"";$("a-keyword").value=a.target_keyword||"";
+    $("a-seo-title").value=a.seo_title||"";$("ed-title").textContent="✏️ 기사 수정";
     window.scrollTo({top:0,behavior:"smooth"});
   };
   window.rDel=async(id)=>{ if(!confirm("이 기사를 삭제할까요?"))return; await sb.from("articles").delete().eq("id",id); loadMine(); };
