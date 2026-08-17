@@ -3,6 +3,11 @@
 // 추가로 /a/{id}.html 중 정적 파일이 없는 기사는 이 함수가 본문 전체를 서버에서
 // 렌더링한 완전한 정적형 페이지를 반환합니다(src=a). 검색엔진·AI 크롤러는 JS를
 // 실행하지 않아도 기사 전문을 읽을 수 있습니다.
+//
+// [2026-07-18 SEO 개선] <title> 태그·meta description은 seo_title(검색어 우선,
+// articles.seo_title 컬럼)을 쓰고, 화면 H1·og:title·twitter:title은 기존 그대로
+// 후킹형 title(편집 헤드라인)을 씁니다. 검색엔진이 가장 강하게 보는 title 태그를
+// 실제 검색어와 맞추면서도, 소셜 공유 시 보이는 문구는 매력적인 헤드라인을 유지합니다.
 const fs = require("fs");
 const path = require("path");
 
@@ -108,7 +113,8 @@ function buildJsonLd(a, canonUrl, descPlain) {
 // /a/{id}.html 정적 파일이 없을 때 본문 전문을 서버 렌더링한 페이지
 function renderFullPage(a, id) {
   const canonUrl = `${SITE_URL}/a/${id}.html`;
-  const title = esc(a.title || "가업승계저널");
+  const title = esc(a.title || "가업승계저널"); // 화면 H1(후킹형 헤드라인) — 그대로 유지
+  const seoTitle = esc(a.seo_title || a.title || "가업승계저널"); // <title> 태그(검색어 우선)
   const descPlain = stripTags(a.lede || a.title || "").slice(0, 160);
   const desc = esc(descPlain);
   const img = esc(a.thumbnail_url || DEFAULT_IMG);
@@ -127,7 +133,7 @@ function renderFullPage(a, id) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title} - 가업승계저널</title>
+<title>${seoTitle} - 가업승계저널</title>
 <meta name="description" content="${desc}">
 <link rel="canonical" href="${canonUrl}">
 <link rel="alternate" type="application/rss+xml" title="가업승계저널 RSS" href="${SITE_URL}/rss.xml">
@@ -214,7 +220,8 @@ module.exports = async (req, res) => {
     try {
       const a = await fetchArticle(id);
       if (a) {
-        const title = esc(a.title || "가업승계저널");
+        const title = esc(a.title || "가업승계저널"); // og:title/twitter:title(소셜 공유용, 후킹형 유지)
+        const seoTitle = esc(a.seo_title || a.title || "가업승계저널"); // <title> 태그(검색어 우선)
         const descPlain = stripTags(a.lede || a.title || "").slice(0, 140);
         const desc = esc(descPlain);
         const img = esc(a.thumbnail_url || DEFAULT_IMG);
@@ -226,7 +233,7 @@ module.exports = async (req, res) => {
           ? `\n<script type="application/ld+json">${JSON.stringify(faqJsonLd(faq))}</script>`
           : "";
 
-        metaBlock = `<title>${title} - 가업승계저널</title>
+        metaBlock = `<title>${seoTitle} - 가업승계저널</title>
 <meta name="description" content="${desc}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
