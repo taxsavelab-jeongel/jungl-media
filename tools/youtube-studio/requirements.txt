@@ -1,0 +1,2 @@
+# output_config(effort+format), adaptive thinking, web_search_20260209 를 지원하는 버전
+anthropic>=0.122

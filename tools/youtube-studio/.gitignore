@@ -1,0 +1,5 @@
+config.ini
+output/
+.venv/
+__pycache__/
+*.pyc
